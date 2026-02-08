@@ -6,6 +6,8 @@
 
 generator client {
   provider = "prisma-client"
+  engineType = "binary"
+  previewFeatures = []
   output   = "../generated/prisma"
 }
 

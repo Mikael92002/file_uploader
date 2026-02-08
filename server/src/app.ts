@@ -12,7 +12,6 @@ async function main(): Promise<void> {
   >`SELECT NOW() AS now`;
 
   console.log("✅ Prisma connected");
-  console.log("🕒 DB time:", result[0].now.toISOString());
 }
 
 main()
