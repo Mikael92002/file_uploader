@@ -20,6 +20,11 @@ model User {
   password  String
 }
 
+model Files{
+  id  Int   @id @default(autoincrement())
+  
+}
+
 model Session {
   id        String   @id
   sid       String   @unique

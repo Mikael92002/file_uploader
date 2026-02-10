@@ -1,9 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
-export const getCurrentUserFromCookie = async (req: Request, res: Response) => {
+export const getCurrentUserFromCookie = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   if (req.user) {
     res.json({ user: req.user });
   } else {
-    res.json({});
+    throw new Error("User not found from current cookie");
   }
 };

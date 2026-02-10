@@ -22,7 +22,7 @@ const validateUser = [
         },
       });
       if (user) {
-        throw new Error("Username is already taken");
+        throw new Error("Username is already taken"); // or next(new Error("message here"))
       }
     }),
   body("password")
@@ -58,3 +58,12 @@ export const signUpPost = [
     }
   },
 ];
+
+export const signOutGet = (req: Request, res: Response, next: NextFunction) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.end();
+  });
+};
