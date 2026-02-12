@@ -1,4 +1,5 @@
-// import { prisma } from "./lib/prisma";
+import { prisma } from "./lib/prisma";
+import bcrypt from "bcryptjs";
 
 // async function main() {
 //   // Create a new user with a post
@@ -36,12 +37,22 @@
 //   console.log("All users:", JSON.stringify(allUsers, null, 2));
 // }
 
-// main()
-//   .then(async () => {
-//     await prisma.$disconnect();
-//   })
-//   .catch(async (e) => {
-//     console.error(e);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
+async function seed() {
+  const hashedPassword = await bcrypt.hash("123", 10);
+  const user = await prisma.user.create({
+    data: {
+      username: "Mik",
+      password: hashedPassword,
+    },
+  });
+}
+
+seed()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

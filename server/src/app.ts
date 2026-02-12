@@ -7,7 +7,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import expressSession from "express-session";
 import "./middleware/auth";
 import passport from "passport";
-import { fileRouter } from "./routes";
+import { fileRouter, formRouter, userRoute } from "./routes";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
@@ -37,7 +37,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use("/api/user", userRoute);
 app.use("/api/file", fileRouter);
+app.use("/api/auth", formRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/members-only/dist")));

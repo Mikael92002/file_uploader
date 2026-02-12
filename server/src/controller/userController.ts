@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { CustomError } from "../Errors/CustomError";
 
 export const getCurrentUserFromCookie = async (
   req: Request,
@@ -6,8 +7,8 @@ export const getCurrentUserFromCookie = async (
   next: NextFunction,
 ) => {
   if (req.user) {
-    res.json({ user: req.user });
+    res.json({ message: "success", user: req.user });
   } else {
-    throw new Error("User not found from current cookie");
+    next(new CustomError("User not found from current cookie", 401));
   }
 };
