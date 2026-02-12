@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logIn } from "../fetches/fetch";
 import { useNavigate } from "react-router";
 import { useContext } from "react";
+import { AuthContext } from "../context/Context";
 
 const LogIn = () => {
+  const currentUser = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/", { replace: true });
+    }
+  }, [currentUser, navigate]);
+
   const [errorMessage, setErrorMessage] = useState("");
 
   async function LogInSubmit(e: React.SubmitEvent) {
@@ -20,19 +29,23 @@ const LogIn = () => {
       setErrorMessage("Incorrect username or password");
     }
   }
-  return (
-    <>
-      <h1>Log In</h1>
-      <form onSubmit={(e) => LogInSubmit(e)}>
-        <div>{errorMessage}</div>
-        <label htmlFor="username">Username:</label>
-        <input type="text" name="username" id="log-in-username" />
-        <label htmlFor="password">Password:</label>
-        <input type="password" name="password" id="log-in-password" />
-        <button type="submit">Log In</button>
-      </form>
-    </>
-  );
+
+  if (currentUser) {
+    return null;
+  } else
+    return (
+      <>
+        <h1>Log In</h1>
+        <form onSubmit={(e) => LogInSubmit(e)}>
+          <div>{errorMessage}</div>
+          <label htmlFor="username">Username:</label>
+          <input type="text" name="username" id="log-in-username" />
+          <label htmlFor="password">Password:</label>
+          <input type="password" name="password" id="log-in-password" />
+          <button type="submit">Log In</button>
+        </form>
+      </>
+    );
 };
 
 export default LogIn;

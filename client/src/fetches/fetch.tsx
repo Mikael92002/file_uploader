@@ -14,6 +14,7 @@ export async function uploadFileFetch(formContents: FormData) {
 export async function getCurrentUser() {
   try {
     const response = await fetch("/api/user");
+
     if (!response.ok) {
       const errorObj = await response.json();
       console.error(errorObj.message);
@@ -28,7 +29,7 @@ export async function getCurrentUser() {
   }
 }
 
-export async function logIn(data: { [k: string]: FormDataEntryValue; }) {
+export async function logIn(data: { [k: string]: FormDataEntryValue }) {
   try {
     const response = await fetch("api/auth/login", {
       method: "POST",

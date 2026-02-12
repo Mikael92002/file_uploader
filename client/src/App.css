@@ -1,42 +1,39 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=block');
+
+
+#root,
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100dvh;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.load-container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 24px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 120px;
+  height: 20px;
+  -webkit-mask: linear-gradient(90deg, #000 70%, #0000 0) left/20% 100%;
+  background:
+    linear-gradient(#000 0 0) left -25% top 0 /20% 100% no-repeat #ddd;
+  mask: linear-gradient(90deg, #000 70%, #0000 0) left/20% 100%;
+  background:
+    linear-gradient(#000 0 0) left -25% top 0 /20% 100% no-repeat #ddd;
+  animation: l7 1s infinite steps(6);
+}
+
+@keyframes l7 {
+  100% {
+    background-position: right -25% top 0
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
