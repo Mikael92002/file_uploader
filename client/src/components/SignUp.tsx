@@ -1,11 +1,20 @@
-import { signUpFetch } from "../fetches/fetch";
+import { logInFetch, signUpFetch } from "../fetches/fetch";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/Context";
 
 const SignUp = () => {
+  const currentUser = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/", { replace: true });
+    }
+  }, [currentUser, navigate]);
+
   const [errorsArray, setErrorsArray] = useState([]);
 
-  const navigate = useNavigate();
   async function handleSignUp(e: React.SubmitEvent) {
     e.preventDefault();
 
@@ -14,35 +23,49 @@ const SignUp = () => {
     const signUpResponse = await signUpFetch(dataAsObjects);
     console.log(signUpResponse);
     if (signUpResponse?.ok) {
+      await logInFetch(dataAsObjects);
       setErrorsArray([]);
       navigate("/");
     } else if (signUpResponse?.status === 400) {
       const signUpObj = await signUpResponse.json();
-      console.log(signUpObj);
       setErrorsArray(signUpObj.errors);
     }
   }
 
-  return (
-    <>
-      {errorsArray.map((error) => {
-        return <div key={error["msg"]}>{error["msg"]}</div>;
-      })}
-      <form onSubmit={(e) => handleSignUp(e)}>
-        <label htmlFor="sign-up-username">Username:</label>
-        <input type="text" name="username" id="sign-up-username" />
-        <label htmlFor="sign-up-password">Password:</label>
-        <input type="password" name="password" id="sign-up-password" />
-        <label htmlFor="confirm-password">Confirm Password:</label>
-        <input
-          type="password"
-          name="confirm-password"
-          id="confirm-password"
-        />
-        <button type="submit">Sign Up</button>
-      </form>
-    </>
-  );
+  if (currentUser) {
+    return null;
+  } else
+    return (
+      <>
+        {errorsArray.map((error) => {
+          return <div key={error["msg"]}>{error["msg"]}</div>;
+        })}
+        <form onSubmit={(e) => handleSignUp(e)}>
+          <label htmlFor="sign-up-username">Username:</label>
+          <input
+            type="text"
+            name="username"
+            id="sign-up-username"
+            maxLength={255}
+          />
+          <label htmlFor="sign-up-password">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="sign-up-password"
+            minLength={8}
+          />
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            minLength={8}
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+      </>
+    );
 };
 
 export default SignUp;

@@ -25,7 +25,8 @@ const validateUser = [
         throw new Error("Username is already taken"); // or next(new Error("message here"))
       }
     }),
-  body("confirm-password")
+    body("password"),
+  body("confirmPassword")
     .isLength({ min: 8 })
     .withMessage("Password must contain 8 letters")
     .matches(/\d/)

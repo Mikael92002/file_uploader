@@ -39,7 +39,7 @@ const LogIn = () => {
         <form onSubmit={(e) => LogInSubmit(e)}>
           <div>{errorMessage}</div>
           <label htmlFor="username">Username:</label>
-          <input type="text" name="username" id="log-in-username" />
+          <input type="text" name="username" id="log-in-username" maxLength={255}/>
           <label htmlFor="password">Password:</label>
           <input type="password" name="password" id="log-in-password" />
           <button type="submit">Log In</button>

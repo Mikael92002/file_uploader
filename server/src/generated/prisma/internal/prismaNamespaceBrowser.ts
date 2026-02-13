@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Folder: 'Folder',
+  File: 'File',
   Session: 'Session'
 } as const
 
@@ -78,6 +80,27 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const FolderScalarFieldEnum = {
+  id: 'id',
+  folderName: 'folderName',
+  folderId: 'folderId'
+} as const
+
+export type FolderScalarFieldEnum = (typeof FolderScalarFieldEnum)[keyof typeof FolderScalarFieldEnum]
+
+
+export const FileScalarFieldEnum = {
+  id: 'id',
+  fileName: 'fileName',
+  fileURL: 'fileURL',
+  size: 'size',
+  uploadTime: 'uploadTime',
+  fileId: 'fileId'
+} as const
+
+export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {

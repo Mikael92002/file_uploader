@@ -39,11 +39,12 @@ function App() {
           ) : currPage === "signup" ? (
             <SignUp />
           ) : currPage === undefined ? (
-            <>{/* Home page goes here */}</>
+            <></>
           ) : (
             <ErrorPage />
           )}
         </AuthContext>
+        <button onClick={() => console.log(currentUser)}>click for user</button>
       </>
     );
 }

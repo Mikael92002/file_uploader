@@ -43,6 +43,22 @@ async function seed() {
     data: {
       username: "Mik",
       password: hashedPassword,
+      folders: {
+        create: {
+          folderName: "test folder",
+          files: {
+            create: {
+              fileName: "test file",
+              fileURL: "test URL",
+              size: 100,
+              uploadTime: new Date(Date.now()),
+            },
+          },
+        },
+      },
+    },
+    include: {
+      folders: true,
     },
   });
 }

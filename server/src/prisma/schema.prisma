@@ -5,29 +5,44 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-  engineType = "binary"
+  provider        = "prisma-client"
+  output          = "../generated/prisma"
+  engineType      = "binary"
   previewFeatures = []
 }
 
 datasource db {
   provider = "postgresql"
 }
+
 model User {
-  id    Int     @id @default(autoincrement())
-  username String  @unique
-  password  String
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  password String
+  folders  Folder[]
 }
 
-model Files{
-  id  Int   @id @default(autoincrement())
-  
+model Folder {
+  id         Int    @id @default(autoincrement())
+  folderName String @db.VarChar(100)
+  user       User   @relation(fields: [folderId], references: [id])
+  folderId   Int
+  files      File[]
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  fileName   String   @unique @db.VarChar(100)
+  fileURL    String
+  size       Decimal  @db.Decimal(5, 2)
+  uploadTime DateTime @db.Timestamptz()
+  folder     Folder   @relation(fields: [fileId], references: [id])
+  fileId     Int
 }
 
 model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresAt   DateTime
+  expiresAt DateTime
 }
