@@ -7,44 +7,54 @@ import { getCurrentUserFetch } from "./fetches/fetch";
 import LogIn from "./components/LogIn";
 import ErrorPage from "./error pages/ErrorPage";
 import SignUp from "./components/SignUp";
+import Header from "./components/Header";
+import type { User } from "./types/types";
+import Home from "./components/Home";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
 
   useEffect(() => {
     async function setUser() {
       const user = await getCurrentUserFetch();
       setCurrentUser(user);
-      setIsLoading(false);
+      setInitiateFade(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 250);
     }
     setUser();
-  }, []); // need to setUser on mount (or currPage?),
-  //  need to null it out when user logged out(or let backend handle it with req.user?)
+  }, [currPage]); // need to setUser on mount (or currPage?),
+  //  need to null it out when user logged out(and/or let backend handle it with req.user?)
 
   if (isLoading) {
     return (
-      <div className="load-container">
-        <div className="loader-text">loading...</div>
-        <div className="loader"></div>
-      </div>
+      <>
+        <Header></Header>
+        <div className={`load-container ${initiateFade === true && "fade"}`}>
+          <div className="loader-text">LOADING...</div>
+          <div className="loader"></div>
+        </div>
+      </>
     );
   } else
     return (
       <>
         <AuthContext value={currentUser}>
+          <Header></Header>
           {currPage === "login" ? (
             <LogIn />
           ) : currPage === "signup" ? (
             <SignUp />
           ) : currPage === undefined ? (
-            <></>
+            <Home />
           ) : (
             <ErrorPage />
           )}
         </AuthContext>
-        <button onClick={() => console.log(currentUser)}>click for user</button>
       </>
     );
 }

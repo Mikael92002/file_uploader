@@ -60,3 +60,13 @@ export async function signUpFetch(data: { [k: string]: FormDataEntryValue }) {
     return null;
   }
 }
+
+export async function signOutFetch() {
+  try {
+    const response = await fetch("/api/auth/signout");
+    return response;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}

@@ -23,11 +23,20 @@ model User {
 }
 
 model Folder {
-  id         Int    @id @default(autoincrement())
-  folderName String @db.VarChar(100)
-  user       User   @relation(fields: [folderId], references: [id])
+  id         Int      @id @default(autoincrement())
+  folderName String   @db.VarChar(100)
+  user       User     @relation(fields: [folderId], references: [id])
   folderId   Int
   files      File[]
+  parentId   Int? // once folder is
+  // created at the top-level (in home)
+  // it lives in a null "parentId"
+  // subsequent folders reference
+  // "id" from this model
+  parent     Folder?  @relation("SubFolders", fields: [parentId], references: [id])
+  // "SubFolders" needed to tell prisma
+  // about recursive relationship
+  children   Folder[] @relation("SubFolders")
 }
 
 model File {

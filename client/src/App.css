@@ -1,22 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=block');
+@font-face {
+  font-family: alien;
+  src: url("./assets/fonts/alien.otf") format('opentype');
+}
 
+* {
+  color: #6CC417;
+  font-family: alien;
+  cursor: url('./assets/cursor-click.png'), auto;
+}
 
 #root,
 html,
 body {
   margin: 0;
   padding: 0;
-  height: 100dvh;
+  height: 100vh;
+  background-color: black;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.load-container{
+button {
+  background-color: black;
+}
+button:hover{
+  background-color: rgba(128, 128, 128, 0.249);
+}
+button:active{
+  background-color: rgb(0, 100, 23);
+}
+
+.title {
+  text-shadow:
+    /* Top */
+    0 -1px 10px #00ff1a,
+    /* Bottom */
+    0 1px 1px #00ff1a,
+    /* Left */
+    -1px 0 1px #00ff1a,
+    /* Right */
+    1px 0 1px #00ff1a;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pseudo {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.load-container {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito Sans", sans-serif;
-  font-size: 24px;
+  font-size: 1.45rem;
+  text-shadow:
+    /* Top */
+    0 -1px 5px #6bc4176c,
+    /* Bottom */
+    0 1px 5px #6bc41774,
+    /* Left */
+    -1px 0 5px #6bc4176f,
+    /* Right */
+    1px 0 5px #6bc41783;
+}
+
+.load-container.fade {
+  animation: fadeOut 0.25s ease-out 0s 1 forwards;
 }
 
 .loader {
@@ -27,8 +83,18 @@ body {
     linear-gradient(#000 0 0) left -25% top 0 /20% 100% no-repeat #ddd;
   mask: linear-gradient(90deg, #000 70%, #0000 0) left/20% 100%;
   background:
-    linear-gradient(#000 0 0) left -25% top 0 /20% 100% no-repeat #ddd;
+    linear-gradient(#6CC417 0 0) left -25% top 0 /20% 100% no-repeat #ddd;
   animation: l7 2s infinite steps(6);
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0
+  }
 }
 
 @keyframes l7 {

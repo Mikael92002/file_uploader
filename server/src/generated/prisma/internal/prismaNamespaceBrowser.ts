@@ -85,7 +85,8 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const FolderScalarFieldEnum = {
   id: 'id',
   folderName: 'folderName',
-  folderId: 'folderId'
+  folderId: 'folderId',
+  parentId: 'parentId'
 } as const
 
 export type FolderScalarFieldEnum = (typeof FolderScalarFieldEnum)[keyof typeof FolderScalarFieldEnum]
@@ -127,4 +128,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
