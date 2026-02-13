@@ -1,5 +1,5 @@
 export async function uploadFileFetch(formContents: FormData) {
-  const uploadFile = await fetch(`api/file/upload`, {
+  const uploadFile = await fetch(`/api/file/upload`, {
     method: "POST",
     body: formContents,
   });
@@ -11,7 +11,7 @@ export async function uploadFileFetch(formContents: FormData) {
 
 // notice returning null is best practice
 // for error handling:
-export async function getCurrentUser() {
+export async function getCurrentUserFetch() {
   try {
     const response = await fetch("/api/user");
 
@@ -29,9 +29,25 @@ export async function getCurrentUser() {
   }
 }
 
-export async function logIn(data: { [k: string]: FormDataEntryValue }) {
+export async function logInFetch(data: { [k: string]: FormDataEntryValue }) {
   try {
-    const response = await fetch("api/auth/login", {
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+export async function signUpFetch(data: { [k: string]: FormDataEntryValue }) {
+  try {
+    const response = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

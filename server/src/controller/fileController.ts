@@ -1,4 +1,7 @@
 import multer from "multer";
+import { Request, Response } from "express";
+
+// remember to check if(req.user on each step!!!)
 
 // To download to disk locally:
 const storage = multer.diskStorage({
@@ -12,3 +15,7 @@ const storage = multer.diskStorage({
   });
 
   export const upload = multer({storage: storage}).single('file');
+
+  export const fileUploadSuccess = (req: Request, res: Response) =>{
+    res.json({success: true, message: "file upload successful"});
+  }

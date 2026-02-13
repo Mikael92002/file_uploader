@@ -25,7 +25,7 @@ const validateUser = [
         throw new Error("Username is already taken"); // or next(new Error("message here"))
       }
     }),
-  body("password")
+  body("confirm-password")
     .isLength({ min: 8 })
     .withMessage("Password must contain 8 letters")
     .matches(/\d/)
@@ -33,7 +33,14 @@ const validateUser = [
     .matches(/[!@#$%^&*(),.?":{}|<>]/)
     .withMessage("Password must contain at least one special character")
     .matches(/[a-zA-Z]/)
-    .withMessage("Password must contain at least one letter"),
+    .withMessage("Password must contain at least one letter")
+    .custom(async (confirmPassword, { req }) => {
+      const password = req.body.password;
+
+      if (password !== confirmPassword) {
+        throw new Error("Passwords must match");
+      }
+    }),
 ];
 
 export const signUpPost = [
@@ -41,12 +48,13 @@ export const signUpPost = [
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+      res.status(400).json({ success: false, errors: errors.array() });
+      return;
     }
     try {
       const { username, password } = matchedData(req);
       const hashedPassword = await bcrypt.hash(password, 10);
-      const addUserQuery = prisma.user.create({
+      const addUserQuery = await prisma.user.create({
         data: {
           username: username,
           password: hashedPassword,

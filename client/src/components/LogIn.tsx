@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { logIn } from "../fetches/fetch";
-import { useNavigate } from "react-router";
+import { logInFetch } from "../fetches/fetch";
+import { useNavigate, Link } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "../context/Context";
 
@@ -20,7 +20,7 @@ const LogIn = () => {
     e.preventDefault();
 
     const formDataAsObj = Object.fromEntries(new FormData(e.target));
-    const logInResponse = await logIn(formDataAsObj);
+    const logInResponse = await logInFetch(formDataAsObj);
     console.log(logInResponse);
     if (logInResponse?.url.endsWith("/success")) {
       setErrorMessage("");
@@ -44,6 +44,7 @@ const LogIn = () => {
           <input type="password" name="password" id="log-in-password" />
           <button type="submit">Log In</button>
         </form>
+        Or: <Link to="/signup">sign up</Link>
       </>
     );
 };

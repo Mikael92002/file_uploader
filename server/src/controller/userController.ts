@@ -7,10 +7,13 @@ export const getCurrentUserFromCookie = async (
   next: NextFunction,
 ) => {
   if (req.user) {
-    res.json({ message: "success", user: req.user });
+    res.json({ success: true, user: req.user });
   } else {
     next(new CustomError("User not found from current cookie", 401));
   }
 };
 
 // use if(req.user) to do other functions
+
+// in addition to above, send 401 to signal
+// front end to clear "user" state!!!
