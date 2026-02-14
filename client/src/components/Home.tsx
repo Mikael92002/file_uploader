@@ -1,11 +1,11 @@
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../context/Context";
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import styles from "../css modules/Home.module.css";
 import HomeSvg from "./HomeSvg";
 
 const Home = () => {
-  const currentUser = useContext(AuthContext);
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     if (!currentUser) {

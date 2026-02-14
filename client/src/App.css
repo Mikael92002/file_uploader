@@ -72,10 +72,6 @@ button:active{
     1px 0 5px #6bc41783;
 }
 
-.load-container.fade {
-  animation: fadeOut 0.25s ease-out 0s 1 forwards;
-}
-
 .loader {
   width: 120px;
   height: 20px;
@@ -86,16 +82,6 @@ button:active{
   background:
     linear-gradient(#6CC417 0 0) left -25% top 0 /20% 100% no-repeat #ddd;
   animation: l7 2s infinite steps(6);
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0
-  }
 }
 
 @keyframes l7 {

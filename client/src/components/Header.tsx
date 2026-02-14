@@ -1,36 +1,36 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/Context";
+import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router";
 import { signOutFetch } from "../fetches/fetch";
 import { useNavigate } from "react-router";
 
 const Header = () => {
-  const user = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useAuth();
   const navigate = useNavigate();
 
   async function signOut() {
     const signOutResponse = await signOutFetch();
     if (signOutResponse?.ok) {
+      setCurrentUser(null);
       navigate("/login");
     }
   }
 
   return (
     <div className="title">
-      {user && <button className="pseudo sign-out">Sign out</button>}
-      {!user && (
+      {currentUser && <button className="pseudo sign-out">Sign out</button>}
+      {!currentUser && (
         <div className="pseudo register">
           <button>Log In</button>
           <button>Sign Up</button>
         </div>
       )}
       <h1>FILE UPLOADER</h1>
-      {user && (
+      {currentUser && (
         <button onClick={() => signOut()} className="sign-out">
           Sign out
         </button>
       )}
-      {!user && (
+      {!currentUser && (
         <div className="register">
           <div className="pseudo register">
             <button>

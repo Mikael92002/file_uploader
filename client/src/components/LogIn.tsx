@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { logInFetch } from "../fetches/fetch";
+import { getCurrentUserFetch, logInFetch } from "../fetches/fetch";
 import { useNavigate, Link } from "react-router";
-import { useContext } from "react";
-import { AuthContext } from "../context/Context";
 import styles from "../css modules/Auth.module.css";
+import type { User } from "../types/types";
+import { useAuth } from "../context/AuthContext";
 
 const LogIn = () => {
-  const currentUser = useContext(AuthContext);
+  const {currentUser, setCurrentUser} = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,14 +17,18 @@ const LogIn = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  async function LogInSubmit(e: React.SubmitEvent) {
+  async function LogInSubmit(
+    e: React.SubmitEvent,
+    setCurrentUser: (value: React.SetStateAction<User | null>) => void,
+  ) {
     e.preventDefault();
 
     const formDataAsObj = Object.fromEntries(new FormData(e.target));
     const logInResponse = await logInFetch(formDataAsObj);
-    console.log(logInResponse);
+    // console.log(logInResponse);
     if (logInResponse?.url.endsWith("/success")) {
       setErrorMessage("");
+      setCurrentUser(await getCurrentUserFetch());
       navigate("/");
     } else if (logInResponse?.url.endsWith("/failure")) {
       setErrorMessage("Incorrect username or password");
@@ -37,7 +41,10 @@ const LogIn = () => {
     return (
       <div className={styles.container}>
         <h1 className={styles.title}>Log In</h1>
-        <form onSubmit={(e) => LogInSubmit(e)} className={styles.form_container}>
+        <form
+          onSubmit={(e) => LogInSubmit(e, setCurrentUser)}
+          className={styles.form_container}
+        >
           <div className={styles.error_container}>{errorMessage}</div>
           <label htmlFor="username">Username:</label>
           <input
@@ -48,7 +55,12 @@ const LogIn = () => {
             required
           />
           <label htmlFor="password">Password:</label>
-          <input type="password" name="password" id="log-in-password" required/>
+          <input
+            type="password"
+            name="password"
+            id="log-in-password"
+            required
+          />
           <button type="submit" className={styles.log_in_button}>
             Log In
           </button>

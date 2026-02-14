@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import "./App.css";
 import FileUploadForm from "./components/FileUploadForm";
-import { AuthContext } from "./context/Context";
+import { AuthContext } from "./context/AuthContext";
 import { useEffect, useState } from "react";
 import { getCurrentUserFetch } from "./fetches/fetch";
 import LogIn from "./components/LogIn";
@@ -33,13 +33,15 @@ function App() {
       setLoadingToFalse();
     }
     setUser();
-  }, [currPage]); // need to setUser on mount (or currPage?),
+  }, []); // need to setUser on mount (or currPage?),
   //  need to null it out when user logged out(and/or let backend handle it with req.user?)
 
   if (isLoading || navigation.state === "loading") {
     return (
       <>
-        <Header></Header>
+        <AuthContext value={{ currentUser, setCurrentUser }}>
+          <Header></Header>
+        </AuthContext>
         <div className={`load-container ${initiateFade === true && "fade"}`}>
           <div className="loader-text">LOADING...</div>
           <div className="loader"></div>
@@ -49,7 +51,7 @@ function App() {
   } else
     return (
       <>
-        <AuthContext value={currentUser}>
+        <AuthContext value={{ currentUser, setCurrentUser }}>
           <Header></Header>
           {currPage === "login" ? (
             <LogIn />

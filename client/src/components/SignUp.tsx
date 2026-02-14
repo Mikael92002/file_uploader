@@ -1,23 +1,27 @@
-import { logInFetch, signUpFetch } from "../fetches/fetch";
+import { getCurrentUserFetch, logInFetch, signUpFetch } from "../fetches/fetch";
 import { useNavigate } from "react-router";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/Context";
+import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import styles from "../css modules/Auth.module.css";
 import { Link } from "react-router";
+import type { User } from "../types/types";
 
 const SignUp = () => {
-  const currentUser = useContext(AuthContext);
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser) {
       navigate("/");
     }
-  }, [currentUser, navigate]);
+  }, [navigate, currentUser]);
 
   const [errorsArray, setErrorsArray] = useState([]);
 
-  async function handleSignUp(e: React.SubmitEvent) {
+  async function handleSignUp(
+    e: React.SubmitEvent,
+    setCurrentUser: (value: React.SetStateAction<User | null>) => void,
+  ) {
     e.preventDefault();
 
     const dataAsObjects = Object.fromEntries(new FormData(e.target));
@@ -27,6 +31,7 @@ const SignUp = () => {
     if (signUpResponse?.ok) {
       await logInFetch(dataAsObjects);
       setErrorsArray([]);
+      setCurrentUser(await getCurrentUserFetch());
       navigate("/");
     } else if (signUpResponse?.status === 400) {
       const signUpObj = await signUpResponse.json();
@@ -47,13 +52,17 @@ const SignUp = () => {
           );
         })}
         <h1 className={styles.title}>Sign Up</h1>
-        <form onSubmit={(e) => handleSignUp(e)}>
+        <form
+          onSubmit={(e) => handleSignUp(e, setCurrentUser)}
+          className={styles.form_container}
+        >
           <label htmlFor="sign-up-username">Username:</label>
           <input
             type="text"
             name="username"
             id="sign-up-username"
-            maxLength={255}
+            maxLength={20}
+            required
           />
           <label htmlFor="sign-up-password">Password:</label>
           <input
@@ -61,6 +70,7 @@ const SignUp = () => {
             name="password"
             id="sign-up-password"
             minLength={8}
+            required
           />
           <label htmlFor="confirmPassword">Confirm Password:</label>
           <input
@@ -68,6 +78,7 @@ const SignUp = () => {
             name="confirmPassword"
             id="confirmPassword"
             minLength={8}
+            required
           />
           <button type="submit" className={styles.log_in_button}>
             Sign Up
