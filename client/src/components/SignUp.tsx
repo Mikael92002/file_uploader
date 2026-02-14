@@ -2,6 +2,8 @@ import { logInFetch, signUpFetch } from "../fetches/fetch";
 import { useNavigate } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/Context";
+import styles from "../css modules/Auth.module.css";
+import { Link } from "react-router";
 
 const SignUp = () => {
   const currentUser = useContext(AuthContext);
@@ -9,7 +11,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/", { replace: true });
+      navigate("/");
     }
   }, [currentUser, navigate]);
 
@@ -36,10 +38,15 @@ const SignUp = () => {
     return null;
   } else
     return (
-      <>
+      <div className={styles.container}>
         {errorsArray.map((error) => {
-          return <div key={error["msg"]}>{error["msg"]}</div>;
+          return (
+            <div key={error["msg"]} className={styles.error_container}>
+              {error["msg"]}
+            </div>
+          );
         })}
+        <h1 className={styles.title}>Sign Up</h1>
         <form onSubmit={(e) => handleSignUp(e)}>
           <label htmlFor="sign-up-username">Username:</label>
           <input
@@ -62,9 +69,12 @@ const SignUp = () => {
             id="confirmPassword"
             minLength={8}
           />
-          <button type="submit">Sign Up</button>
+          <button type="submit" className={styles.log_in_button}>
+            Sign Up
+          </button>
         </form>
-      </>
+        Or: <Link to="/login">Log In</Link>
+      </div>
     );
 };
 

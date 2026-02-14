@@ -28,13 +28,13 @@ const validateUser = [
     body("password"),
   body("confirmPassword")
     .isLength({ min: 8 })
-    .withMessage("Password must contain 8 letters")
+    .withMessage("Password must contain 8 characters")
     .matches(/\d/)
-    .withMessage("Password must contain at least number")
+    .withMessage("Password must contain at least 1 number")
     .matches(/[!@#$%^&*(),.?":{}|<>]/)
-    .withMessage("Password must contain at least one special character")
+    .withMessage("Password must contain at least 1 special character")
     .matches(/[a-zA-Z]/)
-    .withMessage("Password must contain at least one letter")
+    .withMessage("Password must contain at least 1 letter")
     .custom(async (confirmPassword, { req }) => {
       const password = req.body.password;
 

@@ -1,0 +1,33 @@
+.container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.15rem;
+}
+
+.title{
+    text-align: center;
+}
+
+.error_container{
+    height: 32px;
+    color: red;
+}
+
+.form_container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+input{
+    display: block;
+    color: black;
+    font-size: medium;
+}
+
+.log_in_button{
+    font-size: large;
+}

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../context/Context";
 import { Link } from "react-router";
 import { signOutFetch } from "../fetches/fetch";
@@ -7,12 +7,6 @@ import { useNavigate } from "react-router";
 const Header = () => {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login", { replace: true });
-    }
-  }, [user, navigate]);
 
   async function signOut() {
     const signOutResponse = await signOutFetch();

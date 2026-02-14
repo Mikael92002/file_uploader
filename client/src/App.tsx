@@ -10,27 +10,33 @@ import SignUp from "./components/SignUp";
 import Header from "./components/Header";
 import type { User } from "./types/types";
 import Home from "./components/Home";
+import { useNavigation } from "react-router";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
+  const navigation = useNavigation();
+
+  function setLoadingToFalse() {
+    setInitiateFade(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 250);
+  }
 
   useEffect(() => {
     async function setUser() {
       const user = await getCurrentUserFetch();
       setCurrentUser(user);
-      setInitiateFade(true);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 250);
+      setLoadingToFalse();
     }
     setUser();
   }, [currPage]); // need to setUser on mount (or currPage?),
   //  need to null it out when user logged out(and/or let backend handle it with req.user?)
 
-  if (isLoading) {
+  if (isLoading || navigation.state === "loading") {
     return (
       <>
         <Header></Header>
