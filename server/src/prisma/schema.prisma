@@ -33,7 +33,7 @@ model Folder {
   // it lives in a null "parentId"
   // subsequent folders reference
   // "id" from this model
-  parent     Folder?  @relation("SubFolders", fields: [parentId], references: [id])
+  parent     Folder?  @relation("SubFolders", fields: [parentId], references: [id], onDelete: Cascade)
   // "SubFolders" needed to tell prisma
   // about recursive relationship
   children   Folder[] @relation("SubFolders")
