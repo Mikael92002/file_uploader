@@ -45,7 +45,7 @@ model File {
   fileURL    String
   size       Decimal  @db.Decimal(5, 2)
   uploadTime DateTime @db.Timestamptz()
-  folder     Folder   @relation(fields: [fileId], references: [id])
+  folder     Folder   @relation(fields: [fileId], references: [id], onDelete: Cascade)
   fileId     Int
 }
 
