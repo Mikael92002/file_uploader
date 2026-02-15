@@ -5,16 +5,20 @@ import { useAuth } from "../context/AuthContext";
 import styles from "../css modules/Auth.module.css";
 import { Link } from "react-router";
 import type { User } from "../types/types";
+import { useLoad } from "../context/LoadContext";
+import load from "../css modules/Load.module.css";
 
 const SignUp = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, setCurrentUser } = useAuth();
+  const { navLoad } = useLoad();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser) {
       navigate("/");
+      navLoad();
     }
-  }, [navigate, currentUser]);
+  }, [navigate, currentUser, navLoad]);
 
   const [errorsArray, setErrorsArray] = useState([]);
 
@@ -43,7 +47,7 @@ const SignUp = () => {
     return null;
   } else
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} ${load.load_container}`}>
         {errorsArray.map((error) => {
           return (
             <div key={error["msg"]} className={styles.error_container}>
@@ -84,7 +88,7 @@ const SignUp = () => {
             Sign Up
           </button>
         </form>
-        Or: <Link to="/login">Log In</Link>
+        Or: <Link to="/login" onClick={navLoad}>Log In</Link>
       </div>
     );
 };

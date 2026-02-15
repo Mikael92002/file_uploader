@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import { getCurrentUserFetch, logInFetch } from "../fetches/fetch";
 import { useNavigate, Link } from "react-router";
 import styles from "../css modules/Auth.module.css";
+import load from "../css modules/Load.module.css";
 import type { User } from "../types/types";
 import { useAuth } from "../context/AuthContext";
+import { useLoad } from "../context/LoadContext";
 
 const LogIn = () => {
-  const {currentUser, setCurrentUser} = useAuth();
+  const { currentUser, setCurrentUser } = useAuth();
+  const { navLoad } = useLoad();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/");
+      navLoad();
+      navigate("/"); // call setLoadToTrue here...
     }
-  }, [navigate, currentUser]);
+  }, [navigate, currentUser, navLoad]);
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -29,7 +33,7 @@ const LogIn = () => {
     if (logInResponse?.url.endsWith("/success")) {
       setErrorMessage("");
       setCurrentUser(await getCurrentUserFetch());
-      navigate("/");
+      navigate("/"); // call setLoadToTrue here...
     } else if (logInResponse?.url.endsWith("/failure")) {
       setErrorMessage("Incorrect username or password");
     }
@@ -39,7 +43,7 @@ const LogIn = () => {
     return null;
   } else
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} ${load.load_container}`}>
         <h1 className={styles.title}>Log In</h1>
         <form
           onSubmit={(e) => LogInSubmit(e, setCurrentUser)}
@@ -65,7 +69,10 @@ const LogIn = () => {
             Log In
           </button>
         </form>
-        Or: <Link to="/signup">Sign Up</Link>
+        Or:{" "}
+        <Link to="/signup" onClick={navLoad}>
+          Sign Up
+        </Link>
       </div>
     );
 };

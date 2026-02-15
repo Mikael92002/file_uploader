@@ -2,16 +2,21 @@ import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import styles from "../css modules/Home.module.css";
+import load from "../css modules/Load.module.css";
 import HomeSvg from "./HomeSvg";
+import { useLoad } from "../context/LoadContext";
 
 const Home = () => {
   const { currentUser } = useAuth();
+  const { navLoad } = useLoad();
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!currentUser) {
+      navLoad();
       navigate("/login");
     }
-  }, [navigate, currentUser]);
+  }, [navigate, currentUser, navLoad]);
 
   const userStyle = {
     "--chars": 30 + (currentUser?.username?.length ?? 0),
@@ -21,7 +26,7 @@ const Home = () => {
     return null;
   }
   return (
-    <div className={styles.home_container}>
+    <div className={`${styles.home_container} ${load.load_container}`}>
       <div className={styles.greeting_container}>
         <div
           className={styles.greeting}

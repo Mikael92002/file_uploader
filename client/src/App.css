@@ -25,10 +25,12 @@ body {
 button {
   background-color: black;
 }
-button:hover{
+
+button:hover {
   background-color: rgba(128, 128, 128, 0.249);
 }
-button:active{
+
+button:active {
   background-color: rgb(0, 100, 23);
 }
 
@@ -70,6 +72,11 @@ button:active{
     -1px 0 5px #6bc4176f,
     /* Right */
     1px 0 5px #6bc41783;
+    animation: fadeIn 500ms ease-out 1 both;
+}
+
+.load-container.fade {
+  animation: fadeOut 500ms ease-out 1 forwards;
 }
 
 .loader {
@@ -87,5 +94,25 @@ button:active{
 @keyframes l7 {
   100% {
     background-position: right -20% top 0
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }

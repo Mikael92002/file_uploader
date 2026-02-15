@@ -11,26 +11,42 @@ import Header from "./components/Header";
 import type { User } from "./types/types";
 import Home from "./components/Home";
 import { useNavigation } from "react-router";
+import { LoadContext } from "./context/LoadContext";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
   const navigation = useNavigation();
 
-  function setLoadingToFalse() {
-    setInitiateFade(true);
+  // called whenever we are navigating (and initial data fetch),
+  // so attach to useNavigate(?):
+  function setLoadToTrue() {
+    setIsLoading(true);
+    setInitiateFade(false);
+  }
+
+  // should be called with useEffect when component is first mounted?:
+  function setLoadToFalse() {
+    setTimeout(()=>{
+      setInitiateFade(true)
+    }, 500)
     setTimeout(() => {
       setIsLoading(false);
-    }, 250);
+    }, 1000);
+  }
+
+  function navLoad(){
+    setLoadToTrue();
+    setLoadToFalse();
   }
 
   useEffect(() => {
     async function setUser() {
       const user = await getCurrentUserFetch();
       setCurrentUser(user);
-      setLoadingToFalse();
+      setLoadToFalse();
     }
     setUser();
   }, []); // need to setUser on mount (or currPage?),
@@ -52,16 +68,18 @@ function App() {
     return (
       <>
         <AuthContext value={{ currentUser, setCurrentUser }}>
-          <Header></Header>
-          {currPage === "login" ? (
-            <LogIn />
-          ) : currPage === "signup" ? (
-            <SignUp />
-          ) : currPage === undefined ? (
-            <Home />
-          ) : (
-            <ErrorPage />
-          )}
+          <LoadContext value={{ isLoading, setLoadToFalse, setLoadToTrue, navLoad }}>
+            <Header></Header>
+            {currPage === "login" ? (
+              <LogIn />
+            ) : currPage === "signup" ? (
+              <SignUp />
+            ) : currPage === undefined ? (
+              <Home />
+            ) : (
+              <ErrorPage />
+            )}
+          </LoadContext>
         </AuthContext>
       </>
     );
