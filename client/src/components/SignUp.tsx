@@ -7,10 +7,12 @@ import { Link } from "react-router";
 import type { User } from "../types/types";
 import { useLoad } from "../context/LoadContext";
 import load from "../css modules/Load.module.css";
+import { useAudio } from "../context/AudioContext";
 
 const SignUp = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const { navLoad } = useLoad();
+  const { clickSound } = useAudio();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,6 +38,7 @@ const SignUp = () => {
       await logInFetch(dataAsObjects);
       setErrorsArray([]);
       setCurrentUser(await getCurrentUserFetch());
+      navLoad();
       navigate("/");
     } else if (signUpResponse?.status === 400) {
       const signUpObj = await signUpResponse.json();
@@ -84,11 +87,18 @@ const SignUp = () => {
             minLength={8}
             required
           />
-          <button type="submit" className={styles.log_in_button}>
+          <button
+            onClick={clickSound}
+            type="submit"
+            className={styles.log_in_button}
+          >
             Sign Up
           </button>
         </form>
-        Or: <Link to="/login" onClick={navLoad}>Log In</Link>
+        Or:{" "}
+        <Link to="/login" onClick={navLoad}>
+          Log In
+        </Link>
       </div>
     );
 };

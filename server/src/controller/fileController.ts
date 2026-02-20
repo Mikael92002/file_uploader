@@ -19,3 +19,5 @@ const storage = multer.diskStorage({
   export const fileUploadSuccess = (req: Request, res: Response) =>{
     res.json({success: true, message: "file upload successful"});
   }
+
+  // use if (req.user) to verify user:

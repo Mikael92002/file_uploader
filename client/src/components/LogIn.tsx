@@ -6,10 +6,12 @@ import load from "../css modules/Load.module.css";
 import type { User } from "../types/types";
 import { useAuth } from "../context/AuthContext";
 import { useLoad } from "../context/LoadContext";
+import { useAudio } from "../context/AudioContext";
 
 const LogIn = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const { navLoad } = useLoad();
+  const {clickSound} = useAudio();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +35,8 @@ const LogIn = () => {
     if (logInResponse?.url.endsWith("/success")) {
       setErrorMessage("");
       setCurrentUser(await getCurrentUserFetch());
-      navigate("/"); // call setLoadToTrue here...
+      navLoad();
+      navigate("/"); // call navLoad() here...
     } else if (logInResponse?.url.endsWith("/failure")) {
       setErrorMessage("Incorrect username or password");
     }
@@ -65,7 +68,7 @@ const LogIn = () => {
             id="log-in-password"
             required
           />
-          <button type="submit" className={styles.log_in_button}>
+          <button type="submit" onClick={clickSound} className={styles.log_in_button}>
             Log In
           </button>
         </form>

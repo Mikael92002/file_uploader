@@ -12,6 +12,7 @@ import type { User } from "./types/types";
 import Home from "./components/Home";
 import { useNavigation } from "react-router";
 import { LoadContext } from "./context/LoadContext";
+import { AudioContext } from "./context/AudioContext";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -29,15 +30,15 @@ function App() {
 
   // should be called with useEffect when component is first mounted?:
   function setLoadToFalse() {
-    setTimeout(()=>{
-      setInitiateFade(true)
-    }, 500)
+    setTimeout(() => {
+      setInitiateFade(true);
+    }, 500);
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
   }
 
-  function navLoad(){
+  function navLoad() {
     setLoadToTrue();
     setLoadToFalse();
   }
@@ -52,11 +53,18 @@ function App() {
   }, []); // need to setUser on mount (or currPage?),
   //  need to null it out when user logged out(and/or let backend handle it with req.user?)
 
+  const audio = new Audio("/click.mp3");
+  function clickSound() {
+    audio.play();
+  }
+
   if (isLoading || navigation.state === "loading") {
     return (
       <>
         <AuthContext value={{ currentUser, setCurrentUser }}>
-          <Header></Header>
+          <AudioContext value={{ clickSound }}>
+            <Header></Header>
+          </AudioContext>
         </AuthContext>
         <div className={`load-container ${initiateFade === true && "fade"}`}>
           <div className="loader-text">LOADING...</div>
@@ -68,17 +76,21 @@ function App() {
     return (
       <>
         <AuthContext value={{ currentUser, setCurrentUser }}>
-          <LoadContext value={{ isLoading, setLoadToFalse, setLoadToTrue, navLoad }}>
-            <Header></Header>
-            {currPage === "login" ? (
-              <LogIn />
-            ) : currPage === "signup" ? (
-              <SignUp />
-            ) : currPage === undefined ? (
-              <Home />
-            ) : (
-              <ErrorPage />
-            )}
+          <LoadContext
+            value={{ isLoading, setLoadToFalse, setLoadToTrue, navLoad }}
+          >
+            <AudioContext value={{ clickSound }}>
+              <Header></Header>
+              {currPage === "login" ? (
+                <LogIn />
+              ) : currPage === "signup" ? (
+                <SignUp />
+              ) : currPage === undefined ? (
+                <Home />
+              ) : (
+                <ErrorPage />
+              )}
+            </AudioContext>
           </LoadContext>
         </AuthContext>
       </>

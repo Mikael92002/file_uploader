@@ -5,10 +5,12 @@ import styles from "../css modules/Home.module.css";
 import load from "../css modules/Load.module.css";
 import HomeSvg from "./HomeSvg";
 import { useLoad } from "../context/LoadContext";
+import { useAudio } from "../context/AudioContext";
 
 const Home = () => {
   const { currentUser } = useAuth();
   const { navLoad } = useLoad();
+  const {clickSound} = useAudio();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -41,8 +43,8 @@ const Home = () => {
         Makes more sense to get from ui */}
           <HomeSvg />
           <span className={styles.directory}>/</span>
-          <button className={styles.folder}>New Folder</button>
-          <button className={styles.file}>+ File</button>
+          <button className={styles.folder} onClick={clickSound}>New Folder</button>
+          <button className={styles.file} onClick={clickSound}>+ File</button>
         </div>
         <div className={styles.folder_files_container}></div>
       </div>
