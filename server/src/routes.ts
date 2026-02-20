@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getCurrentUserFromCookie } from "./controller/userController";
-import { fileUploadSuccess, upload } from "./controller/fileController";
+import { fileUploadSuccess } from "./controller/fileController";
+import { upload } from "./middleware/uploadMiddleWare";
 import { logInPost, signOutGet, signUpPost } from "./controller/authController";
 
 export const userRoute = Router();
@@ -12,7 +13,8 @@ userRoute.get("/", getCurrentUserFromCookie);
 // implement /:userID route, used to fetch user uploads:
 
 // fileRoute:
-fileRouter.post("/upload", upload, fileUploadSuccess);
+// must be uploaded to a userID:
+fileRouter.post("/upload/:userID?", upload, fileUploadSuccess);
 // fileRouter.get("/user/:userID", /*fetch user folders*/)
 
 // formRoute:

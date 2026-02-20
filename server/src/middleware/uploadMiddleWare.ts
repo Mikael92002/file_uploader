@@ -4,7 +4,7 @@ import config from "./cloudinaryConfig";
 import path from "node:path";
 import { Request } from "express";
 
-function uploadMiddleware(folderName: string) {
+export const upload = (folderName: string) => {
   const storage = new CloudinaryStorage({
     cloudinary: config,
     params: (req: Request, file: Express.Multer.File) => {
