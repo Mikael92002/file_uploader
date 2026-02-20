@@ -10,7 +10,6 @@ import SignUp from "./components/SignUp";
 import Header from "./components/Header";
 import type { User } from "./types/types";
 import Home from "./components/Home";
-import { useNavigation } from "react-router";
 import { LoadContext } from "./context/LoadContext";
 import { AudioContext } from "./context/AudioContext";
 
@@ -19,7 +18,6 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
-  const navigation = useNavigation();
 
   // called whenever we are navigating (and initial data fetch),
   // so attach to useNavigate(?):
@@ -58,7 +56,7 @@ function App() {
     audio.play();
   }
 
-  if (isLoading || navigation.state === "loading") {
+  if (isLoading) {
     return (
       <>
         <AuthContext value={{ currentUser, setCurrentUser }}>
@@ -85,6 +83,8 @@ function App() {
                 <LogIn />
               ) : currPage === "signup" ? (
                 <SignUp />
+              ) : currPage === "upload" ? (
+                <FileUploadForm></FileUploadForm>
               ) : currPage === undefined ? (
                 <Home />
               ) : (

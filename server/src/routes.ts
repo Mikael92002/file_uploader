@@ -14,8 +14,8 @@ userRoute.get("/", getCurrentUserFromCookie);
 
 // fileRoute:
 // must be uploaded to a userID:
-fileRouter.post("/upload/:userID?", upload, fileUploadSuccess);
-// fileRouter.get("/user/:userID", /*fetch user folders*/)
+fileRouter.post("/upload/{:userID}", upload, fileUploadSuccess);
+// fileRouter.get("/user/:userID?", /*fetch user folders*/)
 
 // formRoute:
 authRouter.post("/login", logInPost);

@@ -43,7 +43,10 @@ const Home = () => {
         Makes more sense to get from ui */}
           <HomeSvg />
           <span className={styles.directory}>/</span>
-          <button className={styles.folder} onClick={clickSound}>New Folder</button>
+          <button className={styles.folder} onClick={()=>{
+            clickSound();
+            navigate("/upload")
+          }}>New Folder</button>
           <button className={styles.file} onClick={clickSound}>+ File</button>
         </div>
         <div className={styles.folder_files_container}></div>
