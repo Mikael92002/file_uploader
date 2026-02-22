@@ -40,7 +40,7 @@
     "skipLibCheck": true,
     "moduleResolution": "node"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/lib"],
   "exclude": ["node_modules", "dist", "prisma.config.ts"],
   // "files": ["src/types/types.d.ts"]
 }

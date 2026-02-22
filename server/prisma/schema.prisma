@@ -5,10 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client"
-  output          = "../generated/prisma"
-  engineType      = "binary"
-  previewFeatures = []
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -25,8 +23,8 @@ model User {
 model Folder {
   id         Int      @id @default(autoincrement())
   folderName String   @db.VarChar(100)
-  user       User     @relation(fields: [folderId], references: [id])
-  folderId   Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId   Int
   files      File[]
   parentId   Int? // once folder is
   // created at the top-level (in home)
@@ -45,8 +43,8 @@ model File {
   fileURL    String
   size       Decimal  @db.Decimal(5, 2)
   uploadTime DateTime @db.Timestamptz()
-  folder     Folder   @relation(fields: [fileId], references: [id], onDelete: Cascade)
-  fileId     Int
+  folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId     Int
 }
 
 model Session {

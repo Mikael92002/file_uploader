@@ -29,13 +29,13 @@ export type AggregateFile = {
 export type FileAvgAggregateOutputType = {
   id: number | null
   size: runtime.Decimal | null
-  fileId: number | null
+  folderId: number | null
 }
 
 export type FileSumAggregateOutputType = {
   id: number | null
   size: runtime.Decimal | null
-  fileId: number | null
+  folderId: number | null
 }
 
 export type FileMinAggregateOutputType = {
@@ -44,7 +44,7 @@ export type FileMinAggregateOutputType = {
   fileURL: string | null
   size: runtime.Decimal | null
   uploadTime: Date | null
-  fileId: number | null
+  folderId: number | null
 }
 
 export type FileMaxAggregateOutputType = {
@@ -53,7 +53,7 @@ export type FileMaxAggregateOutputType = {
   fileURL: string | null
   size: runtime.Decimal | null
   uploadTime: Date | null
-  fileId: number | null
+  folderId: number | null
 }
 
 export type FileCountAggregateOutputType = {
@@ -62,7 +62,7 @@ export type FileCountAggregateOutputType = {
   fileURL: number
   size: number
   uploadTime: number
-  fileId: number
+  folderId: number
   _all: number
 }
 
@@ -70,13 +70,13 @@ export type FileCountAggregateOutputType = {
 export type FileAvgAggregateInputType = {
   id?: true
   size?: true
-  fileId?: true
+  folderId?: true
 }
 
 export type FileSumAggregateInputType = {
   id?: true
   size?: true
-  fileId?: true
+  folderId?: true
 }
 
 export type FileMinAggregateInputType = {
@@ -85,7 +85,7 @@ export type FileMinAggregateInputType = {
   fileURL?: true
   size?: true
   uploadTime?: true
-  fileId?: true
+  folderId?: true
 }
 
 export type FileMaxAggregateInputType = {
@@ -94,7 +94,7 @@ export type FileMaxAggregateInputType = {
   fileURL?: true
   size?: true
   uploadTime?: true
-  fileId?: true
+  folderId?: true
 }
 
 export type FileCountAggregateInputType = {
@@ -103,7 +103,7 @@ export type FileCountAggregateInputType = {
   fileURL?: true
   size?: true
   uploadTime?: true
-  fileId?: true
+  folderId?: true
   _all?: true
 }
 
@@ -199,7 +199,7 @@ export type FileGroupByOutputType = {
   fileURL: string
   size: runtime.Decimal
   uploadTime: Date
-  fileId: number
+  folderId: number
   _count: FileCountAggregateOutputType | null
   _avg: FileAvgAggregateOutputType | null
   _sum: FileSumAggregateOutputType | null
@@ -231,7 +231,7 @@ export type FileWhereInput = {
   fileURL?: Prisma.StringFilter<"File"> | string
   size?: Prisma.DecimalFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime?: Prisma.DateTimeFilter<"File"> | Date | string
-  fileId?: Prisma.IntFilter<"File"> | number
+  folderId?: Prisma.IntFilter<"File"> | number
   folder?: Prisma.XOR<Prisma.FolderScalarRelationFilter, Prisma.FolderWhereInput>
 }
 
@@ -241,7 +241,7 @@ export type FileOrderByWithRelationInput = {
   fileURL?: Prisma.SortOrder
   size?: Prisma.SortOrder
   uploadTime?: Prisma.SortOrder
-  fileId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
   folder?: Prisma.FolderOrderByWithRelationInput
 }
 
@@ -254,7 +254,7 @@ export type FileWhereUniqueInput = Prisma.AtLeast<{
   fileURL?: Prisma.StringFilter<"File"> | string
   size?: Prisma.DecimalFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime?: Prisma.DateTimeFilter<"File"> | Date | string
-  fileId?: Prisma.IntFilter<"File"> | number
+  folderId?: Prisma.IntFilter<"File"> | number
   folder?: Prisma.XOR<Prisma.FolderScalarRelationFilter, Prisma.FolderWhereInput>
 }, "id" | "fileName">
 
@@ -264,7 +264,7 @@ export type FileOrderByWithAggregationInput = {
   fileURL?: Prisma.SortOrder
   size?: Prisma.SortOrder
   uploadTime?: Prisma.SortOrder
-  fileId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
   _count?: Prisma.FileCountOrderByAggregateInput
   _avg?: Prisma.FileAvgOrderByAggregateInput
   _max?: Prisma.FileMaxOrderByAggregateInput
@@ -281,7 +281,7 @@ export type FileScalarWhereWithAggregatesInput = {
   fileURL?: Prisma.StringWithAggregatesFilter<"File"> | string
   size?: Prisma.DecimalWithAggregatesFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime?: Prisma.DateTimeWithAggregatesFilter<"File"> | Date | string
-  fileId?: Prisma.IntWithAggregatesFilter<"File"> | number
+  folderId?: Prisma.IntWithAggregatesFilter<"File"> | number
 }
 
 export type FileCreateInput = {
@@ -298,7 +298,7 @@ export type FileUncheckedCreateInput = {
   fileURL: string
   size: runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime: Date | string
-  fileId: number
+  folderId: number
 }
 
 export type FileUpdateInput = {
@@ -315,7 +315,7 @@ export type FileUncheckedUpdateInput = {
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fileId?: Prisma.IntFieldUpdateOperationsInput | number
+  folderId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type FileCreateManyInput = {
@@ -324,7 +324,7 @@ export type FileCreateManyInput = {
   fileURL: string
   size: runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime: Date | string
-  fileId: number
+  folderId: number
 }
 
 export type FileUpdateManyMutationInput = {
@@ -340,7 +340,7 @@ export type FileUncheckedUpdateManyInput = {
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fileId?: Prisma.IntFieldUpdateOperationsInput | number
+  folderId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type FileListRelationFilter = {
@@ -359,13 +359,13 @@ export type FileCountOrderByAggregateInput = {
   fileURL?: Prisma.SortOrder
   size?: Prisma.SortOrder
   uploadTime?: Prisma.SortOrder
-  fileId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type FileAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   size?: Prisma.SortOrder
-  fileId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type FileMaxOrderByAggregateInput = {
@@ -374,7 +374,7 @@ export type FileMaxOrderByAggregateInput = {
   fileURL?: Prisma.SortOrder
   size?: Prisma.SortOrder
   uploadTime?: Prisma.SortOrder
-  fileId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type FileMinOrderByAggregateInput = {
@@ -383,13 +383,13 @@ export type FileMinOrderByAggregateInput = {
   fileURL?: Prisma.SortOrder
   size?: Prisma.SortOrder
   uploadTime?: Prisma.SortOrder
-  fileId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type FileSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   size?: Prisma.SortOrder
-  fileId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type FileCreateNestedManyWithoutFolderInput = {
@@ -496,7 +496,7 @@ export type FileScalarWhereInput = {
   fileURL?: Prisma.StringFilter<"File"> | string
   size?: Prisma.DecimalFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime?: Prisma.DateTimeFilter<"File"> | Date | string
-  fileId?: Prisma.IntFilter<"File"> | number
+  folderId?: Prisma.IntFilter<"File"> | number
 }
 
 export type FileCreateManyFolderInput = {
@@ -538,7 +538,7 @@ export type FileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   fileURL?: boolean
   size?: boolean
   uploadTime?: boolean
-  fileId?: boolean
+  folderId?: boolean
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["file"]>
 
@@ -548,7 +548,7 @@ export type FileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   fileURL?: boolean
   size?: boolean
   uploadTime?: boolean
-  fileId?: boolean
+  folderId?: boolean
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["file"]>
 
@@ -558,7 +558,7 @@ export type FileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   fileURL?: boolean
   size?: boolean
   uploadTime?: boolean
-  fileId?: boolean
+  folderId?: boolean
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["file"]>
 
@@ -568,10 +568,10 @@ export type FileSelectScalar = {
   fileURL?: boolean
   size?: boolean
   uploadTime?: boolean
-  fileId?: boolean
+  folderId?: boolean
 }
 
-export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fileName" | "fileURL" | "size" | "uploadTime" | "fileId", ExtArgs["result"]["file"]>
+export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fileName" | "fileURL" | "size" | "uploadTime" | "folderId", ExtArgs["result"]["file"]>
 export type FileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
 }
@@ -593,7 +593,7 @@ export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     fileURL: string
     size: runtime.Decimal
     uploadTime: Date
-    fileId: number
+    folderId: number
   }, ExtArgs["result"]["file"]>
   composites: {}
 }
@@ -1023,7 +1023,7 @@ export interface FileFieldRefs {
   readonly fileURL: Prisma.FieldRef<"File", 'String'>
   readonly size: Prisma.FieldRef<"File", 'Decimal'>
   readonly uploadTime: Prisma.FieldRef<"File", 'DateTime'>
-  readonly fileId: Prisma.FieldRef<"File", 'Int'>
+  readonly folderId: Prisma.FieldRef<"File", 'Int'>
 }
     
 

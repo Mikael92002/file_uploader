@@ -85,7 +85,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const FolderScalarFieldEnum = {
   id: 'id',
   folderName: 'folderName',
-  folderId: 'folderId',
+  userId: 'userId',
   parentId: 'parentId'
 } as const
 
@@ -98,7 +98,7 @@ export const FileScalarFieldEnum = {
   fileURL: 'fileURL',
   size: 'size',
   uploadTime: 'uploadTime',
-  fileId: 'fileId'
+  folderId: 'folderId'
 } as const
 
 export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
