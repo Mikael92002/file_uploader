@@ -7,7 +7,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import expressSession from "express-session";
 import "./middleware/auth";
 import passport from "passport";
-import { fileRouter, authRouter, userRoute } from "./routes";
+import { fileRouter, authRouter, userRoute, folderRouter } from "./routes";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
@@ -17,7 +17,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static('public')) // to upload files locally
+app.use(express.static("public")); // to upload files locally
 
 app.use(
   expressSession({
@@ -40,6 +40,7 @@ app.use(passport.session());
 app.use("/api/user", userRoute);
 app.use("/api/file", fileRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/folder", folderRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/members-only/dist")));

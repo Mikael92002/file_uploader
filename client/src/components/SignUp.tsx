@@ -33,7 +33,6 @@ const SignUp = () => {
     const dataAsObjects = Object.fromEntries(new FormData(e.target));
 
     const signUpResponse = await signUpFetch(dataAsObjects);
-    console.log(signUpResponse);
     if (signUpResponse?.ok) {
       await logInFetch(dataAsObjects);
       setErrorsArray([]);

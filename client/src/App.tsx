@@ -3,7 +3,7 @@ import "./App.css";
 import FileUploadForm from "./components/FileUploadForm";
 import { AuthContext } from "./context/AuthContext";
 import { useEffect, useState } from "react";
-import { getCurrentUserFetch } from "./fetches/fetch";
+import { getCurrentUserFetch, getRootFolderFetch } from "./fetches/fetch";
 import LogIn from "./components/LogIn";
 import ErrorPage from "./error pages/ErrorPage";
 import SignUp from "./components/SignUp";
@@ -12,9 +12,11 @@ import type { User } from "./types/types";
 import Home from "./components/Home";
 import { LoadContext } from "./context/LoadContext";
 import { AudioContext } from "./context/AudioContext";
+import FolderCreateForm from "./components/FolderCreateForm";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [rootFolder, setRootFolder] = useState(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
@@ -51,6 +53,16 @@ function App() {
   }, []); // need to setUser on mount (or currPage?),
   //  need to null it out when user logged out(and/or let backend handle it with req.user?)
 
+  useEffect(() => {
+    async function setUserFolders() {
+      const rootFolder = await getRootFolderFetch();
+      setRootFolder(rootFolder);
+    }
+    if (currentUser) {
+      setUserFolders();
+    }
+  }, [currentUser]);
+
   const audio = new Audio("/click.mp3");
   function clickSound() {
     audio.play();
@@ -85,6 +97,8 @@ function App() {
                 <SignUp />
               ) : currPage === "upload" ? (
                 <FileUploadForm></FileUploadForm>
+              ) : currPage === "createFolder" ? (
+                <FolderCreateForm></FolderCreateForm>
               ) : currPage === undefined ? (
                 <Home />
               ) : (

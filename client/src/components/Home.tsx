@@ -10,7 +10,7 @@ import { useAudio } from "../context/AudioContext";
 const Home = () => {
   const { currentUser } = useAuth();
   const { navLoad } = useLoad();
-  const {clickSound} = useAudio();
+  const { clickSound } = useAudio();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -43,11 +43,24 @@ const Home = () => {
         Makes more sense to get from ui */}
           <HomeSvg />
           <span className={styles.directory}>/</span>
-          <button className={styles.folder} onClick={()=>{
-            clickSound();
-            navigate("/upload")
-          }}>New Folder</button>
-          <button className={styles.file} onClick={clickSound}>+ File</button>
+          <button
+            className={styles.folder}
+            onClick={() => {
+              clickSound();
+              navigate("/createFolder")
+            }}
+          >
+            New Folder
+          </button>
+          <button
+            className={styles.file}
+            onClick={() => {
+              clickSound();
+              navigate("/upload");
+            }}
+          >
+            + File
+          </button>
         </div>
         <div className={styles.folder_files_container}></div>
       </div>

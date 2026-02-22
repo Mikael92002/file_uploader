@@ -24,7 +24,7 @@ model Folder {
   id         Int      @id @default(autoincrement())
   folderName String   @db.VarChar(100)
   user       User     @relation(fields: [userId], references: [id])
-  userId   Int
+  userId     Int
   files      File[]
   parentId   Int? // once folder is
   // created at the top-level (in home)
@@ -39,12 +39,14 @@ model Folder {
 
 model File {
   id         Int      @id @default(autoincrement())
-  fileName   String   @unique @db.VarChar(100)
+  fileName   String   @db.VarChar(100)
   fileURL    String
   size       Decimal  @db.Decimal(5, 2)
   uploadTime DateTime @db.Timestamptz()
   folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  folderId     Int
+  folderId   Int
+
+  @@unique([fileName, folderId])
 }
 
 model Session {

@@ -247,16 +247,17 @@ export type FileOrderByWithRelationInput = {
 
 export type FileWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  fileName?: string
+  fileName_folderId?: Prisma.FileFileNameFolderIdCompoundUniqueInput
   AND?: Prisma.FileWhereInput | Prisma.FileWhereInput[]
   OR?: Prisma.FileWhereInput[]
   NOT?: Prisma.FileWhereInput | Prisma.FileWhereInput[]
+  fileName?: Prisma.StringFilter<"File"> | string
   fileURL?: Prisma.StringFilter<"File"> | string
   size?: Prisma.DecimalFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   uploadTime?: Prisma.DateTimeFilter<"File"> | Date | string
   folderId?: Prisma.IntFilter<"File"> | number
   folder?: Prisma.XOR<Prisma.FolderScalarRelationFilter, Prisma.FolderWhereInput>
-}, "id" | "fileName">
+}, "id" | "fileName_folderId">
 
 export type FileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -351,6 +352,11 @@ export type FileListRelationFilter = {
 
 export type FileOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FileFileNameFolderIdCompoundUniqueInput = {
+  fileName: string
+  folderId: number
 }
 
 export type FileCountOrderByAggregateInput = {

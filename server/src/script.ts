@@ -37,6 +37,8 @@ import bcrypt from "bcryptjs";
 //   console.log("All users:", JSON.stringify(allUsers, null, 2));
 // }
 
+// Call whenever new user is created:
+
 async function seed() {
   const hashedPassword = await bcrypt.hash("123", 10);
   const user = await prisma.user.create({
@@ -45,7 +47,7 @@ async function seed() {
       password: hashedPassword,
       folders: {
         create: {
-          folderName: "test folder",
+          folderName: "root folder",
           files: {
             create: {
               fileName: "test file",

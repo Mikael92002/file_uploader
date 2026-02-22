@@ -25,7 +25,7 @@ const validateUser = [
         throw new Error("Username is already taken"); // or next(new Error("message here"))
       }
     }),
-    body("password"),
+  body("password"),
   body("confirmPassword")
     .isLength({ min: 8 })
     .withMessage("Password must contain 8 characters")
@@ -55,10 +55,18 @@ export const signUpPost = [
     try {
       const { username, password } = matchedData(req);
       const hashedPassword = await bcrypt.hash(password, 10);
-      const addUserQuery = await prisma.user.create({
+      const user = await prisma.user.create({
         data: {
           username: username,
           password: hashedPassword,
+          folders: {
+            create: {
+              folderName: "root",
+            },
+          },
+        },
+        include: {
+          folders: true,
         },
       });
       res.json({ success: true, errors: [] });

@@ -1,3 +1,5 @@
+import type { FolderObject } from "../types/types";
+
 export async function uploadFileFetch(formContents: FormData) {
   const uploadFile = await fetch(`/api/file/upload`, {
     method: "POST",
@@ -68,5 +70,38 @@ export async function signOutFetch() {
   } catch (e) {
     console.error(e);
     return null;
+  }
+}
+
+export async function createFolderFetch(data: FolderObject) {
+  try {
+    const response = await fetch("/api/folder/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.log(response.status);
+    }
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+export async function getRootFolderFetch() {
+  try {
+    const response = await fetch("/api/folder/");
+    if (response.ok) {
+      const userObjWithFolder = await response.json();
+      console.log(userObjWithFolder);
+      return userObjWithFolder;
+    }
+  } catch (e) {
+    console.error(e);
   }
 }

@@ -3,10 +3,12 @@ import { getCurrentUserFromCookie } from "./controller/userController";
 import { fileUploadSuccess } from "./controller/fileController";
 import { upload } from "./middleware/uploadMiddleWare";
 import { logInPost, signOutGet, signUpPost } from "./controller/authController";
+import { getRootFolder, postNewFolder } from "./controller/folderController";
 
 export const userRoute = Router();
 export const fileRouter = Router();
 export const authRouter = Router();
+export const folderRouter = Router();
 
 // userRoute:
 userRoute.get("/", getCurrentUserFromCookie);
@@ -21,3 +23,7 @@ fileRouter.post("/upload/{:userID}", upload, fileUploadSuccess);
 authRouter.post("/login", logInPost);
 authRouter.post("/signup", ...signUpPost);
 authRouter.get("/signout", signOutGet);
+
+//folderRoute:
+folderRouter.post("/", postNewFolder)
+folderRouter.get("/", getRootFolder);
