@@ -105,6 +105,9 @@ span {
 .folder_files_div {
     padding: 20px 20px 0px 20px;
 }
+.folder_files_div>img{
+    margin-bottom: 5px;
+}
 
 .folder_files_name_div,
 .folder_files_div {

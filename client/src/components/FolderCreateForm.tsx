@@ -1,5 +1,5 @@
 import { createFolderFetch } from "../fetches/fetch";
-import type { FolderObject } from "../types/types";
+import type { FolderFormObject } from "../types/types";
 import { useNavigate } from "react-router";
 
 const FolderCreateForm = ({setCurrFolder}) => {
@@ -8,7 +8,7 @@ const FolderCreateForm = ({setCurrFolder}) => {
   async function createFolder(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const dataAsObjects: FolderObject = {
+    const dataAsObjects: FolderFormObject = {
       ...Object.fromEntries(new FormData(e.target)),
       folderId: 1,
       parentId: 1,

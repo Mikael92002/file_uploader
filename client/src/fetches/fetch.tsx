@@ -1,4 +1,4 @@
-import type { FolderObject } from "../types/types";
+import type { FolderFormObject } from "../types/types";
 
 export async function uploadFileFetch(formContents: FormData) {
   const uploadFile = await fetch(`/api/file/upload`, {
@@ -73,7 +73,7 @@ export async function signOutFetch() {
   }
 }
 
-export async function createFolderFetch(data: FolderObject) {
+export async function createFolderFetch(data: FolderFormObject) {
   try {
     const response = await fetch("/api/folder/", {
       method: "POST",

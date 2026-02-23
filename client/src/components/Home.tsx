@@ -7,9 +7,9 @@ import HomeSvg from "./HomeSvg";
 import { useLoad } from "../context/LoadContext";
 import { useAudio } from "../context/AudioContext";
 import folderImg from "../assets/folder.png";
-import type { FullFolderObject } from "../types/types";
+import type { FolderState } from "../types/types";
 
-const Home = ({ setCurrFolder, currFolder }: FullFolderObject) => {
+const Home = ({ setCurrFolder, currFolder }: FolderState) => {
   // setCurrFolder called whenever:
   // folder created, deleted, clicked, or back-clicked
 
@@ -47,7 +47,7 @@ const Home = ({ setCurrFolder, currFolder }: FullFolderObject) => {
           {/* MUST get below from req.params?
         Makes more sense to get from ui */}
           <HomeSvg />
-          <span className={styles.directory}>/</span>
+          <span className={styles.directory}>/{currFolder.folderName}</span>
           <button
             className={styles.folder}
             onClick={() => {
@@ -77,7 +77,13 @@ const Home = ({ setCurrFolder, currFolder }: FullFolderObject) => {
               userId: number;
             }) => {
               return (
-                <div className={styles.folder_files_div}>
+                <div
+                  className={styles.folder_files_div}
+                  onClick={(e) => {
+                    clickSound();
+                    setCurrFolder(folder)
+                  }}
+                >
                   <img
                     src={folderImg}
                     alt="folder image"
