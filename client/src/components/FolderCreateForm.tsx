@@ -2,7 +2,7 @@ import { createFolderFetch } from "../fetches/fetch";
 import type { FolderObject } from "../types/types";
 import { useNavigate } from "react-router";
 
-const FolderCreateForm = () => {
+const FolderCreateForm = ({setCurrFolder}) => {
   // const navigate = useNavigate();
 
   async function createFolder(e: React.SubmitEvent<HTMLFormElement>) {

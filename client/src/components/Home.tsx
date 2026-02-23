@@ -6,8 +6,13 @@ import load from "../css modules/Load.module.css";
 import HomeSvg from "./HomeSvg";
 import { useLoad } from "../context/LoadContext";
 import { useAudio } from "../context/AudioContext";
+import folderImg from "../assets/folder.png";
+import type { FullFolderObject } from "../types/types";
 
-const Home = () => {
+const Home = ({ setCurrFolder, currFolder }: FullFolderObject) => {
+  // setCurrFolder called whenever:
+  // folder created, deleted, clicked, or back-clicked
+
   const { currentUser } = useAuth();
   const { navLoad } = useLoad();
   const { clickSound } = useAudio();
@@ -47,7 +52,7 @@ const Home = () => {
             className={styles.folder}
             onClick={() => {
               clickSound();
-              navigate("/createFolder")
+              navigate("/createFolder");
             }}
           >
             New Folder
@@ -62,7 +67,31 @@ const Home = () => {
             + File
           </button>
         </div>
-        <div className={styles.folder_files_container}></div>
+        {/* only render the ones in the curr directory:  */}
+        <div className={styles.folder_files_container}>
+          {currFolder?.children?.map(
+            (folder: {
+              folderName: string;
+              id: number;
+              parentId: number;
+              userId: number;
+            }) => {
+              return (
+                <div className={styles.folder_files_div}>
+                  <img
+                    src={folderImg}
+                    alt="folder image"
+                    width="40px"
+                    height="40px"
+                  />
+                  <div className={styles.folder_files_name_div}>
+                    {folder.folderName}
+                  </div>
+                </div>
+              );
+            },
+          )}
+        </div>
       </div>
     </div>
   );

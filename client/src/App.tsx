@@ -17,6 +17,7 @@ import FolderCreateForm from "./components/FolderCreateForm";
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [rootFolder, setRootFolder] = useState(null);
+  const [currFolder, setCurrFolder] = useState(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
@@ -57,6 +58,7 @@ function App() {
     async function setUserFolders() {
       const rootFolder = await getRootFolderFetch();
       setRootFolder(rootFolder);
+      setCurrFolder(rootFolder);
     }
     if (currentUser) {
       setUserFolders();
@@ -98,9 +100,11 @@ function App() {
               ) : currPage === "upload" ? (
                 <FileUploadForm></FileUploadForm>
               ) : currPage === "createFolder" ? (
-                <FolderCreateForm></FolderCreateForm>
+                <FolderCreateForm
+                  setCurrFolder={setCurrFolder}
+                ></FolderCreateForm>
               ) : currPage === undefined ? (
-                <Home />
+                <Home setCurrFolder={setCurrFolder} currFolder={currFolder} />
               ) : (
                 <ErrorPage />
               )}

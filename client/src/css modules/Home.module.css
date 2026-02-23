@@ -98,9 +98,24 @@ span {
     margin-bottom: 3rem;
     border-radius: 10px;
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 150px));
+    grid-auto-rows: min-content;
 }
 
-.action_container, .folder_files_container{
+.folder_files_div {
+    padding: 20px 20px 0px 20px;
+}
+
+.folder_files_name_div,
+.folder_files_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.action_container,
+.folder_files_container {
     box-shadow: 1px -1px 100px green;
 }
 

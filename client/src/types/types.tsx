@@ -13,3 +13,19 @@ export type FolderObject = {
 } & {
   [k: string]: FormDataEntryValue | number | null;
 };
+
+export type FullFolderObject = {
+  setCurrFolder: React.Dispatch<React.SetStateAction<null>>;
+  currFolder: {
+    children: Array<{
+      folderName: string;
+      id: number;
+      parentId: number;
+      userId: number;
+    }>;
+    folderName: string;
+    id: number;
+    parentId: null | number;
+    userId: number;
+  };
+};
