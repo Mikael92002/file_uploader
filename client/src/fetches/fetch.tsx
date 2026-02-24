@@ -1,4 +1,4 @@
-import type { FolderFormObject } from "../types/types";
+import type { DraftFolder } from "../types/types";
 
 export async function uploadFileFetch(formContents: FormData) {
   const uploadFile = await fetch(`/api/file/upload`, {
@@ -73,7 +73,10 @@ export async function signOutFetch() {
   }
 }
 
-export async function createFolderFetch(data: FolderFormObject) {
+// returns response, await json in component
+// and setCurrentUser(null)
+// if response is 401
+export async function createFolderFetch(data: DraftFolder) {
   try {
     const response = await fetch("/api/folder/", {
       method: "POST",
@@ -82,11 +85,7 @@ export async function createFolderFetch(data: FolderFormObject) {
       },
       body: JSON.stringify(data),
     });
-    if (response.ok) {
-      return await response.json();
-    } else {
-      console.log(response.status);
-    }
+    return response;
   } catch (e) {
     console.error(e);
     return null;

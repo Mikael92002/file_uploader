@@ -22,6 +22,7 @@ export async function createNewFolder(
   userId: number,
   folderName: string,
   parentId: number,
+  
 ) {
   const newFolder = await prisma.folder.create({
     data: {
@@ -29,6 +30,10 @@ export async function createNewFolder(
       userId: userId,
       parentId: parentId || null,
     },
+    include:{
+      files: true,
+      children: true,
+    }
   });
   return newFolder;
 }

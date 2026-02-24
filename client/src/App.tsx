@@ -8,16 +8,17 @@ import LogIn from "./components/LogIn";
 import ErrorPage from "./error pages/ErrorPage";
 import SignUp from "./components/SignUp";
 import Header from "./components/Header";
-import type { User } from "./types/types";
+import type { Folder, User } from "./types/types";
 import Home from "./components/Home";
 import { LoadContext } from "./context/LoadContext";
 import { AudioContext } from "./context/AudioContext";
 import FolderCreateForm from "./components/FolderCreateForm";
+import { FolderContext } from "./context/FolderContext";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [rootFolder, setRootFolder] = useState(null);
-  const [currFolder, setCurrFolder] = useState(null);
+  const [rootFolder, setRootFolder] = useState<Folder | null>(null);
+  const [currentFolder, setCurrentFolder] = useState<Folder | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
@@ -58,7 +59,7 @@ function App() {
     async function setUserFolders() {
       const rootFolder = await getRootFolderFetch();
       setRootFolder(rootFolder);
-      setCurrFolder(rootFolder);
+      setCurrentFolder(rootFolder);
     }
     if (currentUser) {
       setUserFolders();
@@ -92,22 +93,25 @@ function App() {
             value={{ isLoading, setLoadToFalse, setLoadToTrue, navLoad }}
           >
             <AudioContext value={{ clickSound }}>
-              <Header></Header>
-              {currPage === "login" ? (
-                <LogIn />
-              ) : currPage === "signup" ? (
-                <SignUp />
-              ) : currPage === "upload" ? (
-                <FileUploadForm></FileUploadForm>
-              ) : currPage === "createFolder" ? (
-                <FolderCreateForm
-                  setCurrFolder={setCurrFolder}
-                ></FolderCreateForm>
-              ) : currPage === undefined ? (
-                <Home setCurrFolder={setCurrFolder} currFolder={currFolder} />
-              ) : (
-                <ErrorPage />
-              )}
+              <FolderContext
+                value={{ currentFolder, rootFolder, setCurrentFolder, setRootFolder }}
+              >
+                <Header></Header>
+                {currPage === "login" ? (
+                  <LogIn />
+                ) : currPage === "signup" ? (
+                  <SignUp />
+                ) : currPage === "upload" ? (
+                  <FileUploadForm></FileUploadForm>
+                ) : currPage === "createFolder" ? (
+                  <FolderCreateForm
+                  ></FolderCreateForm>
+                ) : currPage === undefined ? (
+                  <Home/>
+                ) : (
+                  <ErrorPage />
+                )}
+              </FolderContext>
             </AudioContext>
           </LoadContext>
         </AuthContext>

@@ -16,6 +16,10 @@ export type File = {
   folderId: number;
 };
 
+// basically says that follow the File type
+// above but exclude id:
+export type DraftFile = Omit<File, "id">;
+
 export type Folder = {
   id: number;
   folderName: string;
@@ -24,6 +28,8 @@ export type Folder = {
   parentId: number | null;
   children: Array<Folder>;
 };
+
+export type DraftFolder = Omit<Folder, "id">;
 
 // The following needs to be FolderObject:
 export type FolderFormObject = {
@@ -42,21 +48,7 @@ export type FolderFormObject = {
   [k: string]: FormDataEntryValue | number | null;
 };
 
-export type FolderObject = {
-  children: Array<{
-    folderName: string;
-    id: number;
-    parentId: number;
-    userId: number;
-  }>;
-  // REMEMBER TO ADD FILES !!!
-  folderName: string;
-  id: number;
-  parentId: null | number;
-  userId: number;
-};
-
 export type FolderState = {
-  setCurrFolder: React.Dispatch<React.SetStateAction<FolderObject>>;
-  currFolder: FolderObject | null;
+  setCurrFolder: React.Dispatch<React.SetStateAction<Folder>>;
+  currFolder: Folder | null;
 };

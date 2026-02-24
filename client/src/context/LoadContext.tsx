@@ -7,7 +7,7 @@ navLoad: () => void,
 isLoading: boolean;
 }
 
-export const LoadContext = createContext<LoadContextType | null>(null); // equal to isLoading
+export const LoadContext = createContext<LoadContextType | null>(null);
 
 export const useLoad = () => {
     const context = useContext(LoadContext);

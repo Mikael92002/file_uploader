@@ -7,15 +7,16 @@ import HomeSvg from "./HomeSvg";
 import { useLoad } from "../context/LoadContext";
 import { useAudio } from "../context/AudioContext";
 import folderImg from "../assets/folder.png";
-import type { FolderState } from "../types/types";
+import { useFolder } from "../context/FolderContext";
 
-const Home = ({ setCurrFolder, currFolder }: FolderState) => {
+const Home = () => {
   // setCurrFolder called whenever:
   // folder created, deleted, clicked, or back-clicked
 
   const { currentUser } = useAuth();
   const { navLoad } = useLoad();
   const { clickSound } = useAudio();
+  const { setCurrentFolder, currentFolder } = useFolder();
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -47,7 +48,9 @@ const Home = ({ setCurrFolder, currFolder }: FolderState) => {
           {/* MUST get below from req.params?
         Makes more sense to get from ui */}
           <HomeSvg />
-          <span className={styles.directory}>/{currFolder.folderName}</span>
+          <span className={styles.directory}>
+            /{currentFolder?.folderName ?? null}
+          </span>
           <button
             className={styles.folder}
             onClick={() => {
@@ -69,34 +72,28 @@ const Home = ({ setCurrFolder, currFolder }: FolderState) => {
         </div>
         {/* only render the ones in the curr directory:  */}
         <div className={styles.folder_files_container}>
-          {currFolder?.children?.map(
-            (folder: {
-              folderName: string;
-              id: number;
-              parentId: number;
-              userId: number;
-            }) => {
-              return (
-                <div
-                  className={styles.folder_files_div}
-                  onClick={(e) => {
-                    clickSound();
-                    setCurrFolder(folder)
-                  }}
-                >
-                  <img
-                    src={folderImg}
-                    alt="folder image"
-                    width="40px"
-                    height="40px"
-                  />
-                  <div className={styles.folder_files_name_div}>
-                    {folder.folderName}
-                  </div>
+          {currentFolder?.children?.map((folder) => {
+            return (
+              <div
+                className={styles.folder_files_div}
+                onClick={() => {
+                  clickSound();
+                  setCurrentFolder(folder);
+                }}
+                key={folder.id}
+              >
+                <img
+                  src={folderImg}
+                  alt="folder image"
+                  width="40px"
+                  height="40px"
+                />
+                <div className={styles.folder_files_name_div}>
+                  {folder.folderName}
                 </div>
-              );
-            },
-          )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
