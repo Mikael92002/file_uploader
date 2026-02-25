@@ -92,15 +92,16 @@ export async function createFolderFetch(data: DraftFolder) {
   }
 }
 
-export async function getRootFolderFetch() {
+export async function getAllUserFoldersFetch(id: number) {
   try {
-    const response = await fetch("/api/folder/");
+    const response = await fetch(`/api/folder/${id}`);
     if (response.ok) {
-      const userObjWithFolder = await response.json();
-      console.log(userObjWithFolder);
-      return userObjWithFolder;
+      return await response.json();
+    } else {
+      throw new Error(`Response not ok: ${response.status}`);
     }
   } catch (e) {
     console.error(e);
+    return null;
   }
 }

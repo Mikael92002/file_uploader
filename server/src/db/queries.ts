@@ -22,7 +22,6 @@ export async function createNewFolder(
   userId: number,
   folderName: string,
   parentId: number,
-  
 ) {
   const newFolder = await prisma.folder.create({
     data: {
@@ -30,10 +29,10 @@ export async function createNewFolder(
       userId: userId,
       parentId: parentId || null,
     },
-    include:{
+    include: {
       files: true,
       children: true,
-    }
+    },
   });
   return newFolder;
 }
@@ -53,4 +52,16 @@ export async function getRootFolderFromUser(userId: number) {
   });
   console.log(rootFolder?.folders[0]);
   return rootFolder?.folders[0];
+}
+
+export async function getAllFoldersFromUserId(id: number) {
+  const folders = await prisma.folder.findMany({
+    where: {
+      userId: id,
+    },
+    include: {
+      files: true,
+    },
+  });
+  return folders;
 }

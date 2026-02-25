@@ -3,7 +3,7 @@ import "./App.css";
 import FileUploadForm from "./components/FileUploadForm";
 import { AuthContext } from "./context/AuthContext";
 import { useEffect, useState } from "react";
-import { getCurrentUserFetch, getRootFolderFetch } from "./fetches/fetch";
+import { getCurrentUserFetch, getAllUserFoldersFetch } from "./fetches/fetch";
 import LogIn from "./components/LogIn";
 import ErrorPage from "./error pages/ErrorPage";
 import SignUp from "./components/SignUp";
@@ -22,6 +22,39 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
+  // flattened rootFolder into children
+  // pseudocode:
+
+  //   const rootFolderChildren = map.get(null)
+
+  // // rootFolderChildren = [{id: 1, parentId: null}, {id: 2, parentId: null}] other properties excluded for brevity
+
+  // let currArray = [...rootFolderChildren]
+  // map.delete(null)
+
+  // while(map.size>0){
+
+  // let nextLevel = [];
+
+  // for(let i = 0;i<currArray.length;i++){
+
+  // let parentId = currArray[i].id
+
+  // let childrenFromParentId = map.get(parentId)
+
+  // currArray[i].children = [];
+  // if(childrenFromParentId){
+  // for(let j = 0;j<childrenFromParentId.length;j++){
+
+  // currArray[i].children.push(childrenFromParentId[j])
+
+  // nextLevel.push(childrenFromParentId[j])
+  //}
+  //}
+
+  // // delete parentId from map}
+
+  // currArray = nextLevel;}
 
   // called whenever we are navigating (and initial data fetch),
   // so attach to useNavigate(?):
@@ -56,13 +89,12 @@ function App() {
   //  need to null it out when user logged out(and/or let backend handle it with req.user?)
 
   useEffect(() => {
-    async function setUserFolders() {
-      const rootFolder = await getRootFolderFetch();
+    async function setUserFolders(id: number) {
+      const rootFolder = await getAllUserFoldersFetch(id);
       setRootFolder(rootFolder);
-      setCurrentFolder(rootFolder);
     }
     if (currentUser) {
-      setUserFolders();
+      setUserFolders(currentUser.id);
     }
   }, [currentUser]);
 
@@ -94,7 +126,12 @@ function App() {
           >
             <AudioContext value={{ clickSound }}>
               <FolderContext
-                value={{ currentFolder, rootFolder, setCurrentFolder, setRootFolder }}
+                value={{
+                  currentFolder,
+                  rootFolder,
+                  setCurrentFolder,
+                  setRootFolder,
+                }}
               >
                 <Header></Header>
                 {currPage === "login" ? (
@@ -104,13 +141,13 @@ function App() {
                 ) : currPage === "upload" ? (
                   <FileUploadForm></FileUploadForm>
                 ) : currPage === "createFolder" ? (
-                  <FolderCreateForm
-                  ></FolderCreateForm>
+                  <FolderCreateForm></FolderCreateForm>
                 ) : currPage === undefined ? (
-                  <Home/>
+                  <Home />
                 ) : (
                   <ErrorPage />
                 )}
+                <button onClick={() => console.log(rootFolder)}>click</button>
               </FolderContext>
             </AudioContext>
           </LoadContext>
