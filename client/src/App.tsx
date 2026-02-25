@@ -24,7 +24,7 @@ function App() {
   const { currPage } = useParams();
   // flattened rootFolder into children
   // pseudocode:
-
+  // firstly, initialize map
   //   const rootFolderChildren = map.get(null)
 
   // // rootFolderChildren = [{id: 1, parentId: null}, {id: 2, parentId: null}] other properties excluded for brevity
