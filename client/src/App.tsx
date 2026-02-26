@@ -22,39 +22,39 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
-  // flattened rootFolder into children
-  // pseudocode:
-  // firstly, initialize map
-  //   const rootFolderChildren = map.get(null)
 
-  // // rootFolderChildren = [{id: 1, parentId: null}, {id: 2, parentId: null}] other properties excluded for brevity
+  function flatFolderArrayToNestedArray(arr: Folder[]) {
+    const map = new Map<number | null, Array<Folder>>();
+    for (const folder of arr) {
+      if (map.get(folder.parentId)) {
+        map.get(folder.parentId)?.push(folder);
+      } else {
+        map.set(folder.parentId, [folder]);
+      }
+    }
+    let q = map.get(null) || [];
+    const currArray = map.get(null);
+    map.delete(null);
+    while (q.length > 0) {
+      let nextLevel: Folder[] = [];
+      for (let i = 0; i < q.length; i++) {
+        const parentId = q[i].id;
+        const childrenFromParentId = map.get(parentId);
 
-  // let currArray = [...rootFolderChildren]
-  // map.delete(null)
+        q[i].children = [];
 
-  // while(map.size>0){
-
-  // let nextLevel = [];
-
-  // for(let i = 0;i<currArray.length;i++){
-
-  // let parentId = currArray[i].id
-
-  // let childrenFromParentId = map.get(parentId)
-
-  // currArray[i].children = [];
-  // if(childrenFromParentId){
-  // for(let j = 0;j<childrenFromParentId.length;j++){
-
-  // currArray[i].children.push(childrenFromParentId[j])
-
-  // nextLevel.push(childrenFromParentId[j])
-  //}
-  //}
-
-  // // delete parentId from map}
-
-  // currArray = nextLevel;}
+        if (childrenFromParentId) {
+          for (let j = 0; j < childrenFromParentId.length; j++) {
+            const childFolder = childrenFromParentId[j];
+            q[i].children.push(childFolder);
+          }
+        }
+        nextLevel = q[i].children;
+      }
+      q = nextLevel;
+    }
+    return currArray![0];
+  }
 
   // called whenever we are navigating (and initial data fetch),
   // so attach to useNavigate(?):
@@ -90,8 +90,10 @@ function App() {
 
   useEffect(() => {
     async function setUserFolders(id: number) {
-      const rootFolder = await getAllUserFoldersFetch(id);
-      setRootFolder(rootFolder);
+      const rootFolderFetch = await getAllUserFoldersFetch(id);
+      const tree = flatFolderArrayToNestedArray(rootFolderFetch);
+
+      setRootFolder(tree);
     }
     if (currentUser) {
       setUserFolders(currentUser.id);

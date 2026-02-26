@@ -47,6 +47,6 @@ export const getAllUserFolders = async (
   }
 
   const prismaQuery = await getAllFoldersFromUserId(Number(req.params.userId));
-  
-  res.json({ prismaQuery });
+
+  res.json(prismaQuery);
 };
