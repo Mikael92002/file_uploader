@@ -1,11 +1,11 @@
 import { prisma } from "../lib/prisma";
 
-async function insertIntoSecondSublevel() {
+async function insertIntoThirdSublevel() {
   const insertQuery = await prisma.folder.create({
     data: {
-      folderName: "second sub folder",
+      folderName: "third sub folder",
       userId: 1,
-      parentId: 12,
+      parentId: 14,
     },
     include: {
       files: true,
@@ -14,7 +14,7 @@ async function insertIntoSecondSublevel() {
   });
 }
 
-insertIntoSecondSublevel()
+insertIntoThirdSublevel()
   .then(async () => {
     await prisma.$disconnect();
   })

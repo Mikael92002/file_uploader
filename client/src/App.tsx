@@ -14,6 +14,7 @@ import { LoadContext } from "./context/LoadContext";
 import { AudioContext } from "./context/AudioContext";
 import FolderCreateForm from "./components/FolderCreateForm";
 import { FolderContext } from "./context/FolderContext";
+import { flatFolderArrayToNestedArray } from "./utils/functions";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -22,39 +23,6 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
   const { currPage } = useParams();
-
-  function flatFolderArrayToNestedArray(arr: Folder[]) {
-    const map = new Map<number | null, Array<Folder>>();
-    for (const folder of arr) {
-      if (map.get(folder.parentId)) {
-        map.get(folder.parentId)?.push(folder);
-      } else {
-        map.set(folder.parentId, [folder]);
-      }
-    }
-    let q = map.get(null) || [];
-    const currArray = map.get(null);
-    map.delete(null);
-    while (q.length > 0) {
-      let nextLevel: Folder[] = [];
-      for (let i = 0; i < q.length; i++) {
-        const parentId = q[i].id;
-        const childrenFromParentId = map.get(parentId);
-
-        q[i].children = [];
-
-        if (childrenFromParentId) {
-          for (let j = 0; j < childrenFromParentId.length; j++) {
-            const childFolder = childrenFromParentId[j];
-            q[i].children.push(childFolder);
-          }
-        }
-        nextLevel = q[i].children;
-      }
-      q = nextLevel;
-    }
-    return currArray![0];
-  }
 
   // called whenever we are navigating (and initial data fetch),
   // so attach to useNavigate(?):
@@ -92,8 +60,8 @@ function App() {
     async function setUserFolders(id: number) {
       const rootFolderFetch = await getAllUserFoldersFetch(id);
       const tree = flatFolderArrayToNestedArray(rootFolderFetch);
-
       setRootFolder(tree);
+      setCurrentFolder(tree);
     }
     if (currentUser) {
       setUserFolders(currentUser.id);
