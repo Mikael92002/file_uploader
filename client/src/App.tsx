@@ -48,6 +48,7 @@ function App() {
 
   useEffect(() => {
     async function setUser() {
+      setLoadToTrue();
       const user = await getCurrentUserFetch();
       setCurrentUser(user);
       setLoadToFalse();

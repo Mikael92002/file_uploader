@@ -52,3 +52,8 @@ export type FolderState = {
   setCurrFolder: React.Dispatch<React.SetStateAction<Folder>>;
   currFolder: Folder | null;
 };
+
+export type Directory = {
+  id: number;
+  folderName: string;
+}

@@ -52,9 +52,13 @@ const FolderCreateForm = () => {
     // place in a folder state:
   }
 
+  const cssStyle = {
+    height: "100%",
+  };
+
   return (
     <>
-      <form onSubmit={(e) => createFolder(e)}>
+      <form onSubmit={(e) => createFolder(e)} style={cssStyle}>
         <label htmlFor="folderName">Folder Name:</label>
         <input type="text" required id="folderName" name="folderName" />
         <button type="submit">Create New Folder</button>

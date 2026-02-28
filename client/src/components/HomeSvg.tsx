@@ -1,4 +1,8 @@
-const HomeSvg = () => {
+interface HomeSvgProps{
+  homeClick: ()=>void
+}
+
+const HomeSvg = ({homeClick: popClick}: HomeSvgProps) => {
   return (
     <svg
       fill="green"
@@ -6,10 +10,11 @@ const HomeSvg = () => {
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="20px"
-      height="20px"
+      width="100%"
+      height="100%"
       viewBox="0 0 495.398 495.398"
       xmlSpace="preserve"
+      onClick={popClick}
     >
       <g>
         <g>

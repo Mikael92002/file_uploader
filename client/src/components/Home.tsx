@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import styles from "../css modules/Home.module.css";
@@ -8,6 +8,8 @@ import { useLoad } from "../context/LoadContext";
 import { useAudio } from "../context/AudioContext";
 import folderImg from "../assets/folder.png";
 import { useFolder } from "../context/FolderContext";
+import { findFolderFromId } from "../utils/functions";
+import type { Directory } from "../types/types";
 
 const Home = () => {
   // setCurrFolder called whenever:
@@ -16,7 +18,35 @@ const Home = () => {
   const { currentUser } = useAuth();
   const { navLoad } = useLoad();
   const { clickSound } = useAudio();
-  const { setCurrentFolder, currentFolder } = useFolder();
+  const { setCurrentFolder, currentFolder, rootFolder } = useFolder();
+  const [directory, setDirectory] = useState<Array<Directory>>([]);
+
+  function pushToDirectory(newFolder: { id: number; folderName: string }) {
+    setDirectory((prevDirectory) => {
+      return [...prevDirectory, newFolder];
+    });
+  }
+
+  function setDirectoryToRoot() {
+    setDirectory([]);
+    setCurrentFolder(rootFolder);
+  }
+
+  function removeFromDirectoryAfterFolder(folder: Directory) {
+    const index = directory.findIndex(
+      (folderInDirectory) =>
+        folder.id === folderInDirectory.id &&
+        folder.folderName === folderInDirectory.folderName,
+    );
+    const newArr = directory.slice(0, index + 1);
+    setDirectory(newArr);
+    const foundFolder = findFolderFromId(
+      rootFolder!,
+      newArr[newArr.length - 1].id,
+    );
+    console.log(foundFolder);
+    setCurrentFolder(foundFolder);
+  }
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -47,10 +77,30 @@ const Home = () => {
         <div className={styles.action_container}>
           {/* MUST get below from req.params?
         Makes more sense to get from ui */}
-          <HomeSvg />
-          <span className={styles.directory}>
-            /{currentFolder?.folderName ?? null}
-          </span>
+          <div className={styles.svg_container}>
+            <HomeSvg
+              homeClick={() => {
+                clickSound();
+                setDirectoryToRoot();
+              }}
+            />
+          </div>
+          <div className={styles.directory}>
+            /
+            {directory.map((directoryObj) => {
+              return (
+                <span
+                  onClick={() => {
+                    clickSound();
+                    removeFromDirectoryAfterFolder(directoryObj);
+                  }}
+                  key={directoryObj.id}
+                >
+                  {directoryObj.folderName}/
+                </span>
+              );
+            })}
+          </div>
           <button
             className={styles.folder}
             onClick={() => {
@@ -77,6 +127,10 @@ const Home = () => {
               <div
                 className={styles.folder_files_div}
                 onClick={() => {
+                  pushToDirectory({
+                    id: folder.id,
+                    folderName: folder.folderName,
+                  });
                   clickSound();
                   setCurrentFolder(folder);
                 }}
