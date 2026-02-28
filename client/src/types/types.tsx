@@ -29,24 +29,10 @@ export type Folder = {
   children: Array<Folder>;
 };
 
-export type DraftFolder = Omit<Folder, "id">;
-
-// The following needs to be FolderObject:
-export type FolderFormObject = {
-  children: Array<{
-    folderName: string;
-    id: number;
-    parentId: number;
-    userId: number;
-  }>;
-  // REMEMBER TO ADD FILES !!!
-  folderName: string;
-  id: number;
-  parentId: null | number;
-  userId: number;
-} & {
-  [k: string]: FormDataEntryValue | number | null;
-};
+export type DraftFolder = Omit<
+  Folder,
+  "id" | "userId" | "files" | "children" | "files"
+>;
 
 export type FolderState = {
   setCurrFolder: React.Dispatch<React.SetStateAction<Folder>>;
@@ -56,4 +42,4 @@ export type FolderState = {
 export type Directory = {
   id: number;
   folderName: string;
-}
+};

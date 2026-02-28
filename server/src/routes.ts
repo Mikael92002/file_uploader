@@ -1,9 +1,12 @@
 import { Router } from "express";
 import { getCurrentUserFromCookie } from "./controller/userController";
 import { fileUploadSuccess } from "./controller/fileController";
-import { upload } from "./middleware/uploadMiddleWare";
+import { upload as uploadMiddleWare } from "./middleware/uploadMiddleWare";
 import { logInPost, signOutGet, signUpPost } from "./controller/authController";
-import { getAllUserFolders, postNewFolder } from "./controller/folderController";
+import {
+  getAllUserFolders,
+  postNewFolder,
+} from "./controller/folderController";
 
 export const userRoute = Router();
 export const fileRouter = Router();
@@ -16,7 +19,8 @@ userRoute.get("/", getCurrentUserFromCookie);
 
 // fileRoute:
 // must be uploaded to a userID:
-fileRouter.post("/upload/{:userID}", upload, fileUploadSuccess);
+const upload = uploadMiddleWare("fileFolder");
+fileRouter.post("/upload/{:userID}", upload.single("file"), fileUploadSuccess);
 // fileRouter.get("/user/:userID?", /*fetch user folders*/)
 
 // formRoute:
@@ -25,5 +29,5 @@ authRouter.post("/signup", ...signUpPost);
 authRouter.get("/signout", signOutGet);
 
 //folderRoute:
-folderRouter.post("/", postNewFolder)
+folderRouter.post("/", postNewFolder);
 folderRouter.get("/:userId", getAllUserFolders);

@@ -10,6 +10,7 @@ import folderImg from "../assets/folder.png";
 import { useFolder } from "../context/FolderContext";
 import { findFolderFromId } from "../utils/functions";
 import type { Directory } from "../types/types";
+import FolderCreateForm from "./FolderCreateForm";
 
 const Home = () => {
   // setCurrFolder called whenever:
@@ -75,8 +76,6 @@ const Home = () => {
       </div>
       <div className={styles.main_container}>
         <div className={styles.action_container}>
-          {/* MUST get below from req.params?
-        Makes more sense to get from ui */}
           <div className={styles.svg_container}>
             <HomeSvg
               homeClick={() => {
@@ -86,6 +85,14 @@ const Home = () => {
             />
           </div>
           <div className={styles.directory}>
+            <span
+              onClick={() => {
+                clickSound();
+                setDirectoryToRoot();
+              }}
+            >
+              home
+            </span>
             /
             {directory.map((directoryObj) => {
               return (
@@ -101,15 +108,10 @@ const Home = () => {
               );
             })}
           </div>
-          <button
-            className={styles.folder}
-            onClick={() => {
-              clickSound();
-              navigate("/createFolder");
-            }}
-          >
-            New Folder
-          </button>
+          <FolderCreateForm
+            folderParentId={currentFolder?.id ?? null}
+            clickSound={clickSound}
+          ></FolderCreateForm>
           <button
             className={styles.file}
             onClick={() => {

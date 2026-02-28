@@ -1,7 +1,8 @@
 import multer from "multer";
 import { Request, Response } from "express";
+import { createNewFile } from "../db/queries";
 
-export const fileUploadSuccess = (req: Request, res: Response) => {
+export const fileUploadSuccess = async (req: Request, res: Response) => {
   if (!req.user) {
     return res
       .status(401)
@@ -18,6 +19,10 @@ export const fileUploadSuccess = (req: Request, res: Response) => {
   }
 
   const fileURL = req.file.path;
+  const fileSize = req.file.size;
+  const { fileName, folderId } = req.body;
+  // upload file to db:
+  const newFile = await createNewFile(fileName, fileURL, fileSize, folderId);
 
   res.status(200).json({ success: true, fileURL: fileURL });
 };

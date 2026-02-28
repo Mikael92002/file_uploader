@@ -25,4 +25,4 @@ export const upload = (folderName: string) => {
       fileSize: 5 * 1024 * 1024,
     },
   });
-}
+};

@@ -37,23 +37,6 @@ export async function createNewFolder(
   return newFolder;
 }
 
-export async function getRootFolderFromUser(userId: number) {
-  // children should contain all folders:
-  const rootFolder = await prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      folders: {
-        include: {
-          children: true,
-          files: true,
-        },
-      },
-    },
-  });
-  console.log(rootFolder?.folders[0]);
-  return rootFolder?.folders[0];
-}
-
 export async function getAllFoldersFromUserId(id: number) {
   const folders = await prisma.folder.findMany({
     where: {

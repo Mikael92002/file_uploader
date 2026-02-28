@@ -1,70 +1,87 @@
-import { useAuth } from "../context/AuthContext";
-import { useFolder } from "../context/FolderContext";
-import { useLoad } from "../context/LoadContext";
+import { useState } from "react";
+import Modal from "react-modal";
+import styles from "../css modules/Home.module.css";
 import { createFolderFetch } from "../fetches/fetch";
-import type { DraftFolder } from "../types/types";
-import { useNavigate } from "react-router";
+import type { DraftFolder, Folder } from "../types/types";
+import { useFolder } from "../context/FolderContext";
 
-const FolderCreateForm = () => {
-  const { navLoad } = useLoad();
-  const { currentUser, setCurrentUser } = useAuth();
-  const { currentFolder, setCurrentFolder, rootFolder, setRootFolder } =
-    useFolder();
-  const navigate = useNavigate();
+interface FolderForm {
+  folderParentId: number | null;
+  clickSound: () => void;
+}
+
+const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const {setCurrentFolder} = useFolder();
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    // do stuff after modal is open
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   async function createFolder(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const folderName = new FormData(e.target).get("folderName")!.toString();
+    const folderName = new FormData(e.target).get("folderName")?.toString();
+    const folderObject: DraftFolder = {
+      folderName: folderName!,
+      parentId: folderParentId,
+    };
 
-    if (currentUser) {
-      const dataAsObjects: DraftFolder = {
-        folderName: folderName,
-        userId: currentUser.id,
-        files: [],
-        parentId: currentFolder!.id,
-        children: [],
-      };
-
-      const newFolderResponse = await createFolderFetch(dataAsObjects);
-      if (newFolderResponse && newFolderResponse.status === 401) {
-        // no user, setCurrUser to null, go to home
-        setCurrentUser(null);
-        navLoad();
-        navigate("/");
-      }
-      if (newFolderResponse && newFolderResponse.ok) {
-        const newFolder = await newFolderResponse.json();
-        console.log("This is the new folder: ", newFolder);
-        // should also setRootFolder...
-        setCurrentFolder((prevFolder) => {
-          if (!prevFolder) return null;
-          return {
-            ...prevFolder,
-            children: [...prevFolder.children, newFolder],
-          };
-        });
-        navLoad();
-        navigate("/");
-      }
+    const newFolderResponse = await createFolderFetch(folderObject);
+    if(newFolderResponse && newFolderResponse.ok){
+      const newFolder = await newFolderResponse.json()
+      // set currentFolder
+      setCurrentFolder((prevFolder)=>{
+        if(!prevFolder) return null;
+        return {...prevFolder, children: [...prevFolder.children, newFolder]}
+      })
+      closeModal();
     }
-
-    // place in a folder state:
+    else{
+      //specify errors
+    }
+    console.log(newFolderResponse);
   }
 
-  const cssStyle = {
-    height: "100%",
-  };
-
+  Modal.setAppElement("#root");
   return (
     <>
-      <form onSubmit={(e) => createFolder(e)} style={cssStyle}>
-        <label htmlFor="folderName">Folder Name:</label>
-        <input type="text" required id="folderName" name="folderName" />
-        <button type="submit">Create New Folder</button>
-      </form>
+      <button
+        className={styles.folder}
+        onClick={() => {
+          clickSound();
+          openModal();
+        }}
+      >
+        New Folder
+      </button>
+      <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        className={styles.modal}
+        overlayClassName={styles.overlay}
+      >
+        <div>New Folder</div>
+        <button className={styles.modalClose} onClick={() => closeModal()}>
+          X
+        </button>
+        <form onSubmit={(e) => createFolder(e)} className={styles.modalForm}>
+          {/* Add size, name constraints: */}
+          <label htmlFor="folderName">Folder Name:</label>
+          <input type="text" id="folderName" name="folderName" required />
+          <button>Create Folder</button>
+        </form>
+      </Modal>
     </>
   );
 };
-
 export default FolderCreateForm;

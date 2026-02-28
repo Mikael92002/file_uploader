@@ -12,7 +12,6 @@ import type { Folder, User } from "./types/types";
 import Home from "./components/Home";
 import { LoadContext } from "./context/LoadContext";
 import { AudioContext } from "./context/AudioContext";
-import FolderCreateForm from "./components/FolderCreateForm";
 import { FolderContext } from "./context/FolderContext";
 import { flatFolderArrayToNestedArray } from "./utils/functions";
 

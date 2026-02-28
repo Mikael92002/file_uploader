@@ -1,7 +1,6 @@
 import {
   createNewFolder,
   getAllFoldersFromUserId,
-  getRootFolderFromUser,
 } from "../db/queries";
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../Errors/CustomError";
@@ -22,18 +21,6 @@ export const postNewFolder = async (
   res.json(query);
 };
 
-export const getRootFolder = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  if (!req.user) {
-    next(new CustomError("Root Folder GET failed: no user found", 401));
-  }
-  const query = await getRootFolderFromUser(req.user.id);
-  res.json(query);
-};
-
 export const getAllUserFolders = async (
   req: Request,
   res: Response,
@@ -47,6 +34,6 @@ export const getAllUserFolders = async (
   }
 
   const prismaQuery = await getAllFoldersFromUserId(Number(req.params.userId));
-
-  res.json(prismaQuery);
+  
+  res.json(prismaQuery );
 };
