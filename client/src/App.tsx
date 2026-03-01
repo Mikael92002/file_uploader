@@ -13,7 +13,10 @@ import Home from "./components/Home";
 import { LoadContext } from "./context/LoadContext";
 import { AudioContext } from "./context/AudioContext";
 import { FolderContext } from "./context/FolderContext";
-import { flatFolderArrayToNestedArray } from "./utils/functions";
+import {
+  findFolderFromId,
+  flatFolderArrayToNestedArray,
+} from "./utils/functions";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -21,7 +24,7 @@ function App() {
   const [currentFolder, setCurrentFolder] = useState<Folder | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initiateFade, setInitiateFade] = useState(false);
-  const { currPage } = useParams();
+  const { currPage, folderId } = useParams();
 
   // called whenever we are navigating (and initial data fetch),
   // so attach to useNavigate(?):
@@ -57,16 +60,33 @@ function App() {
   //  need to null it out when user logged out(and/or let backend handle it with req.user?)
 
   useEffect(() => {
-    async function setUserFolders(id: number) {
+    async function buildRootFolder(id: number) {
       const rootFolderFetch = await getAllUserFoldersFetch(id);
       const tree = flatFolderArrayToNestedArray(rootFolderFetch);
       setRootFolder(tree);
-      setCurrentFolder(tree);
     }
     if (currentUser) {
-      setUserFolders(currentUser.id);
+      buildRootFolder(currentUser.id);
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    function setCurrentFolderFromFolderIdURL() {
+      if (!rootFolder) return;
+      if (!folderId) {
+        setCurrentFolder(rootFolder);
+      }
+
+      function setFolderFromFolderIdURL() {
+        const folder = findFolderFromId(rootFolder!, Number(folderId));
+        if (folder) {
+          setCurrentFolder(folder);
+        } else setCurrentFolder(rootFolder);
+      }
+      setFolderFromFolderIdURL();
+    }
+    setCurrentFolderFromFolderIdURL();
+  }, [folderId, rootFolder]);
 
   const audio = new Audio("/click.mp3");
   function clickSound() {
@@ -110,14 +130,14 @@ function App() {
                   <SignUp />
                 ) : currPage === "upload" ? (
                   <FileUploadForm></FileUploadForm>
-                ) : currPage === "createFolder" ? (
-                  <FolderCreateForm></FolderCreateForm>
-                ) : currPage === undefined ? (
+                ) : currPage === "home" ? (
                   <Home />
                 ) : (
                   <ErrorPage />
                 )}
-                <button onClick={() => console.log(rootFolder)}>click</button>
+                <button onClick={() => console.log(currentFolder)}>
+                  click
+                </button>
               </FolderContext>
             </AudioContext>
           </LoadContext>

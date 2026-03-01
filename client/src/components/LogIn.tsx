@@ -17,7 +17,7 @@ const LogIn = () => {
   useEffect(() => {
     if (currentUser) {
       navLoad();
-      navigate("/"); // call setLoadToTrue here...
+      navigate("/home");
     }
   }, [navigate, currentUser, navLoad]);
 

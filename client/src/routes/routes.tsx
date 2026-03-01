@@ -3,7 +3,7 @@ import ErrorPage from "../error pages/ErrorPage";
 
 const routes = [
     {
-        path: "/:currPage?",
+        path: "/:currPage?/:folderId?",
         element: <App></App>,
         errorElement: <ErrorPage></ErrorPage>
     }

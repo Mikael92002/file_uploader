@@ -2,8 +2,10 @@ import { useState } from "react";
 import Modal from "react-modal";
 import styles from "../css modules/Home.module.css";
 import { createFolderFetch } from "../fetches/fetch";
-import type { DraftFolder, Folder } from "../types/types";
+import type { DraftFolder } from "../types/types";
 import { useFolder } from "../context/FolderContext";
+import { insertInRootFolder } from "../utils/functions";
+import { useParams } from "react-router";
 
 interface FolderForm {
   folderParentId: number | null;
@@ -12,7 +14,8 @@ interface FolderForm {
 
 const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
   const [modalIsOpen, setIsOpen] = useState(false);
-  const {setCurrentFolder} = useFolder();
+  const { setRootFolder, rootFolder } = useFolder();
+  const {folderId} = useParams();
 
   function openModal() {
     setIsOpen(true);
@@ -36,19 +39,15 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
     };
 
     const newFolderResponse = await createFolderFetch(folderObject);
-    if(newFolderResponse && newFolderResponse.ok){
-      const newFolder = await newFolderResponse.json()
-      // set currentFolder
-      setCurrentFolder((prevFolder)=>{
-        if(!prevFolder) return null;
-        return {...prevFolder, children: [...prevFolder.children, newFolder]}
-      })
+    if (newFolderResponse && newFolderResponse.ok) {
+      const newFolder = await newFolderResponse.json();
+      // set rootFolder
+      const newRoot = insertInRootFolder(newFolder, Number(folderId), rootFolder!);
+      setRootFolder(newRoot)
       closeModal();
+    } else {
+      //specify errors (name constraints)
     }
-    else{
-      //specify errors
-    }
-    console.log(newFolderResponse);
   }
 
   Modal.setAppElement("#root");

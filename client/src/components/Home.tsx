@@ -19,7 +19,7 @@ const Home = () => {
   const { currentUser } = useAuth();
   const { navLoad } = useLoad();
   const { clickSound } = useAudio();
-  const { setCurrentFolder, currentFolder, rootFolder } = useFolder();
+  const { currentFolder, rootFolder } = useFolder();
   const [directory, setDirectory] = useState<Array<Directory>>([]);
 
   function pushToDirectory(newFolder: { id: number; folderName: string }) {
@@ -30,7 +30,7 @@ const Home = () => {
 
   function setDirectoryToRoot() {
     setDirectory([]);
-    setCurrentFolder(rootFolder);
+    navigate("/home");
   }
 
   function removeFromDirectoryAfterFolder(folder: Directory) {
@@ -45,8 +45,7 @@ const Home = () => {
       rootFolder!,
       newArr[newArr.length - 1].id,
     );
-    console.log(foundFolder);
-    setCurrentFolder(foundFolder);
+    navigate(`/home/${foundFolder!.id}`);
   }
 
   const navigate = useNavigate();
@@ -134,7 +133,7 @@ const Home = () => {
                     folderName: folder.folderName,
                   });
                   clickSound();
-                  setCurrentFolder(folder);
+                  navigate(`/home/${folder.id}`);
                 }}
                 key={folder.id}
               >
