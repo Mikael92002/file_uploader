@@ -1,4 +1,4 @@
-import type { Folder } from "../types/types";
+import type { Directory, Folder } from "../types/types";
 
 //used to set array on app mount or user log in:
 export function flatFolderArrayToNestedArray(arr: Folder[]) {
@@ -90,6 +90,31 @@ function recursiveInsert(
         } else return childObj;
       });
       return { ...folder, children: newChildArr };
+    }
+  }
+  return null;
+}
+
+export function getPath(folderId: number | undefined, root: Folder | null) {
+  if (!folderId || !root) return [{ id: root?.id, folderName: "root" }];
+  const path = recursivePath(root, folderId);
+  return path ?? [{ id: root?.id, folderName: "root" }];
+}
+
+function recursivePath(folder: Folder, folderId: number): Directory[] | null {
+  if (folderId === folder.id) {
+    return [{ id: folder.id, folderName: folder.folderName }];
+  }
+  if (folder.children.length === 0) {
+    return null;
+  }
+  for (let i = 0; i < folder.children.length; i++) {
+    const child: Directory[] | null = recursivePath(
+      folder.children[i],
+      folderId,
+    );
+    if (child !== null) {
+      return [{ id: folder.id, folderName: folder.folderName }, ...child];
     }
   }
   return null;

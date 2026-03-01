@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styles from "../css modules/Home.module.css";
 import load from "../css modules/Load.module.css";
 import HomeSvg from "./HomeSvg";
@@ -8,8 +8,7 @@ import { useLoad } from "../context/LoadContext";
 import { useAudio } from "../context/AudioContext";
 import folderImg from "../assets/folder.png";
 import { useFolder } from "../context/FolderContext";
-import { findFolderFromId } from "../utils/functions";
-import type { Directory } from "../types/types";
+import { getPath } from "../utils/functions";
 import FolderCreateForm from "./FolderCreateForm";
 
 const Home = () => {
@@ -20,33 +19,11 @@ const Home = () => {
   const { navLoad } = useLoad();
   const { clickSound } = useAudio();
   const { currentFolder, rootFolder } = useFolder();
-  const [directory, setDirectory] = useState<Array<Directory>>([]);
 
-  function pushToDirectory(newFolder: { id: number; folderName: string }) {
-    setDirectory((prevDirectory) => {
-      return [...prevDirectory, newFolder];
-    });
-  }
-
-  function setDirectoryToRoot() {
-    setDirectory([]);
-    navigate("/home");
-  }
-
-  function removeFromDirectoryAfterFolder(folder: Directory) {
-    const index = directory.findIndex(
-      (folderInDirectory) =>
-        folder.id === folderInDirectory.id &&
-        folder.folderName === folderInDirectory.folderName,
-    );
-    const newArr = directory.slice(0, index + 1);
-    setDirectory(newArr);
-    const foundFolder = findFolderFromId(
-      rootFolder!,
-      newArr[newArr.length - 1].id,
-    );
-    navigate(`/home/${foundFolder!.id}`);
-  }
+  const { folderId } = useParams();
+  const directory = useMemo(() => {
+    return getPath(Number(folderId), rootFolder);
+  }, [rootFolder, folderId]);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -79,26 +56,17 @@ const Home = () => {
             <HomeSvg
               homeClick={() => {
                 clickSound();
-                setDirectoryToRoot();
+                navigate("/home");
               }}
             />
           </div>
           <div className={styles.directory}>
-            <span
-              onClick={() => {
-                clickSound();
-                setDirectoryToRoot();
-              }}
-            >
-              home
-            </span>
-            /
             {directory.map((directoryObj) => {
               return (
                 <span
                   onClick={() => {
                     clickSound();
-                    removeFromDirectoryAfterFolder(directoryObj);
+                    navigate(`/home/${directoryObj.id}`);
                   }}
                   key={directoryObj.id}
                 >
@@ -128,10 +96,6 @@ const Home = () => {
               <div
                 className={styles.folder_files_div}
                 onClick={() => {
-                  pushToDirectory({
-                    id: folder.id,
-                    folderName: folder.folderName,
-                  });
                   clickSound();
                   navigate(`/home/${folder.id}`);
                 }}
@@ -151,6 +115,9 @@ const Home = () => {
           })}
         </div>
       </div>
+      <button onClick={() => console.log(getPath(35, rootFolder!))}>
+        path
+      </button>
     </div>
   );
 };

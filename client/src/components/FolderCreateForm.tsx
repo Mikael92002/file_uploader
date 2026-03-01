@@ -15,7 +15,7 @@ interface FolderForm {
 const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { setRootFolder, rootFolder } = useFolder();
-  const {folderId} = useParams();
+  const { folderId } = useParams();
 
   function openModal() {
     setIsOpen(true);
@@ -42,8 +42,12 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
     if (newFolderResponse && newFolderResponse.ok) {
       const newFolder = await newFolderResponse.json();
       // set rootFolder
-      const newRoot = insertInRootFolder(newFolder, Number(folderId), rootFolder!);
-      setRootFolder(newRoot)
+      const newRoot = insertInRootFolder(
+        newFolder,
+        Number(folderId),
+        rootFolder!,
+      );
+      setRootFolder(newRoot);
       closeModal();
     } else {
       //specify errors (name constraints)
@@ -70,14 +74,22 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
         overlayClassName={styles.overlay}
       >
         <div>New Folder</div>
-        <button className={styles.modalClose} onClick={() => closeModal()}>
+        <button
+          className={styles.modalClose}
+          onClick={() => {
+            clickSound();
+            closeModal();
+          }}
+        >
           X
         </button>
         <form onSubmit={(e) => createFolder(e)} className={styles.modalForm}>
           {/* Add size, name constraints: */}
           <label htmlFor="folderName">Folder Name:</label>
           <input type="text" id="folderName" name="folderName" required />
-          <button>Create Folder</button>
+          <button type="submit" onClick={() => clickSound()}>
+            Create Folder
+          </button>
         </form>
       </Modal>
     </>
