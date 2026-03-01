@@ -34,6 +34,9 @@ function createFolderMap(arr: Folder[]) {
 // used to setCurrentFolder:
 export function findFolderFromId(rootFolder: Folder, id: number) {
   // do bfs from rootFolder:
+  if (id === rootFolder.id) {
+    return rootFolder;
+  }
   const root = [rootFolder];
   let q = root || [];
   while (q.length > 0) {
