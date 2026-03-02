@@ -20,8 +20,7 @@ userRoute.get("/", getCurrentUserFromCookie);
 // fileRoute:
 // must be uploaded to a userID:
 const upload = uploadMiddleWare("fileFolder");
-fileRouter.post("/upload/{:userID}", upload.single("file"), fileUploadSuccess);
-// fileRouter.get("/user/:userID?", /*fetch user folders*/)
+fileRouter.post("/upload", upload.single("file"), fileUploadSuccess);
 
 // formRoute:
 authRouter.post("/login", logInPost);

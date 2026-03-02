@@ -8,11 +8,7 @@ export const fileUploadSuccess = async (req: Request, res: Response) => {
       .status(401)
       .json({ success: false, error: "No user found from cookie" });
   }
-  if (!req.params.userID) {
-    return res
-      .status(400)
-      .json({ success: false, error: "Missing userID in request" });
-  }
+
   // should not happen if front end validated with "required":
   if (!req.file) {
     return res.status(400).json({ success: false, error: "No file uploaded" });
@@ -20,9 +16,10 @@ export const fileUploadSuccess = async (req: Request, res: Response) => {
 
   const fileURL = req.file.path;
   const fileSize = req.file.size;
-  const { fileName, folderId } = req.body;
+  const folderId = Number(req.body.folderId);
+  const fileName = req.body.fileName;
   // upload file to db:
   const newFile = await createNewFile(fileName, fileURL, fileSize, folderId);
-
+  console.log(newFile);
   res.status(200).json({ success: true, fileURL: fileURL });
 };
