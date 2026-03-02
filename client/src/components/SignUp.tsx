@@ -38,7 +38,7 @@ const SignUp = () => {
       setErrorsArray([]);
       setCurrentUser(await getCurrentUserFetch());
       navLoad();
-      navigate("/");
+      navigate("/home");
     } else if (signUpResponse?.status === 400) {
       const signUpObj = await signUpResponse.json();
       setErrorsArray(signUpObj.errors);

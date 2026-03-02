@@ -36,7 +36,7 @@ const LogIn = () => {
       setErrorMessage("");
       setCurrentUser(await getCurrentUserFetch());
       navLoad();
-      navigate("/"); // call navLoad() here...
+      navigate("/home"); // call navLoad() here...
     } else if (logInResponse?.url.endsWith("/failure")) {
       setErrorMessage("Incorrect username or password");
     }

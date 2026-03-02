@@ -17,10 +17,10 @@ import type * as Prisma from "./prismaNamespace"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.4.1",
-  "engineVersion": "55ae170b1ced7fc6ed07a15f110549408c501bb3",
+  "clientVersion": "7.4.2",
+  "engineVersion": "94a226be1cf2967af2541cca5529f0f7ba866919",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id       Int      @id @default(autoincrement())\n  username String   @unique\n  password String\n  folders  Folder[]\n}\n\nmodel Folder {\n  id         Int      @id @default(autoincrement())\n  folderName String   @db.VarChar(100)\n  user       User     @relation(fields: [userId], references: [id])\n  userId     Int\n  files      File[]\n  parentId   Int? // once folder is\n  // created at the top-level (in home)\n  // it lives in a null \"parentId\"\n  // subsequent folders reference\n  // \"id\" from this model\n  parent     Folder?  @relation(\"SubFolders\", fields: [parentId], references: [id], onDelete: Cascade)\n  // \"SubFolders\" needed to tell prisma\n  // about recursive relationship\n  children   Folder[] @relation(\"SubFolders\")\n}\n\nmodel File {\n  id         Int      @id @default(autoincrement())\n  fileName   String   @db.VarChar(100)\n  fileURL    String\n  size       Decimal  @db.Decimal(5, 2)\n  uploadTime DateTime @db.Timestamptz()\n  folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)\n  folderId   Int\n\n  @@unique([fileName, folderId])\n}\n\nmodel Session {\n  id        String   @id\n  sid       String   @unique\n  data      String\n  expiresAt DateTime\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id       Int      @id @default(autoincrement())\n  username String   @unique\n  password String\n  folders  Folder[]\n}\n\nmodel Folder {\n  id         Int      @id @default(autoincrement())\n  folderName String   @db.VarChar(100)\n  user       User     @relation(fields: [userId], references: [id])\n  userId     Int\n  files      File[]\n  parentId   Int? // once folder is\n  // created at the top-level (in home)\n  // it lives in a null \"parentId\"\n  // subsequent folders reference\n  // \"id\" from this model\n  parent     Folder?  @relation(\"SubFolders\", fields: [parentId], references: [id], onDelete: Cascade)\n  // \"SubFolders\" needed to tell prisma\n  // about recursive relationship\n  children   Folder[] @relation(\"SubFolders\")\n}\n\nmodel File {\n  id         Int      @id @default(autoincrement())\n  fileName   String   @db.VarChar(100)\n  fileURL    String\n  size       Decimal  @db.Decimal(7, 2)\n  uploadTime DateTime @db.Timestamptz()\n  folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)\n  folderId   Int\n\n  @@unique([fileName, folderId])\n}\n\nmodel Session {\n  id        String   @id\n  sid       String   @unique\n  data      String\n  expiresAt DateTime\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -67,7 +67,9 @@ export interface PrismaClientConstructor {
    * Type-safe database client for TypeScript
    * @example
    * ```
-   * const prisma = new PrismaClient()
+   * const prisma = new PrismaClient({
+   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * })
    * // Fetch zero or more Users
    * const users = await prisma.user.findMany()
    * ```
@@ -89,7 +91,9 @@ export interface PrismaClientConstructor {
  * Type-safe database client for TypeScript
  * @example
  * ```
- * const prisma = new PrismaClient()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
  * // Fetch zero or more Users
  * const users = await prisma.user.findMany()
  * ```

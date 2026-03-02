@@ -1,14 +1,17 @@
 import type { DraftFolder } from "../types/types";
 
 export async function uploadFileFetch(formContents: FormData) {
-  const uploadFile = await fetch(`/api/file/upload`, {
-    method: "POST",
-    body: formContents,
-  });
+  try {
+    const uploadFile = await fetch(`/api/file/upload`, {
+      method: "POST",
+      body: formContents,
+    });
 
-  const response = await uploadFile.json();
-
-  console.log(response);
+    console.log(uploadFile);
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
 // notice returning null is best practice

@@ -128,9 +128,7 @@ function App() {
                   <LogIn />
                 ) : currPage === "signup" ? (
                   <SignUp />
-                ) : currPage === "upload" ? (
-                  <FileUploadForm></FileUploadForm>
-                ) : currPage === "home" ? (
+                )  : currPage === "home" ? (
                   <Home />
                 ) : (
                   <ErrorPage />

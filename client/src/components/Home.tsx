@@ -10,6 +10,7 @@ import folderImg from "../assets/folder.png";
 import { useFolder } from "../context/FolderContext";
 import { getPath } from "../utils/functions";
 import FolderCreateForm from "./FolderCreateForm";
+import FileUploadForm from "./FileUploadForm";
 
 const Home = () => {
   // setCurrFolder called whenever:
@@ -79,15 +80,9 @@ const Home = () => {
             folderParentId={currentFolder?.id ?? null}
             clickSound={clickSound}
           ></FolderCreateForm>
-          <button
-            className={styles.file}
-            onClick={() => {
-              clickSound();
-              navigate("/upload");
-            }}
-          >
-            + File
-          </button>
+          <FileUploadForm
+            folderId={Number(folderId) || rootFolder!.id}
+          ></FileUploadForm>
         </div>
         {/* only render the ones in the curr directory:  */}
         <div className={styles.folder_files_container}>
@@ -110,6 +105,14 @@ const Home = () => {
                 <div className={styles.folder_files_name_div}>
                   {folder.folderName}
                 </div>
+              </div>
+            );
+          })}
+          {currentFolder?.files?.map((file) => {
+            return (
+              <div className={styles.folder_files_div} key={file.id}>
+                <img src={file.fileURL} alt="" height="20px" />
+                <div className={styles.img_name}>{file.fileName}</div>
               </div>
             );
           })}
