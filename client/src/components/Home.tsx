@@ -110,9 +110,17 @@ const Home = () => {
           })}
           {currentFolder?.files?.map((file) => {
             return (
-              <div className={styles.folder_files_div} key={file.id}>
+              <div
+                className={styles.folder_files_div}
+                key={file.id}
+                onClick={() => {
+                  clickSound();
+                  navLoad();
+                  navigate(`/file/${file.id}`);
+                }}
+              >
                 <img src={file.fileURL} alt="" height="20px" />
-                <div className={styles.img_name}>{file.fileName}</div>
+                <div className={styles.folder_files_name_div}>{file.fileName}</div>
               </div>
             );
           })}

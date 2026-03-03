@@ -28,13 +28,13 @@ export type AggregateFile = {
 
 export type FileAvgAggregateOutputType = {
   id: number | null
-  size: runtime.Decimal | null
+  size: number | null
   folderId: number | null
 }
 
 export type FileSumAggregateOutputType = {
   id: number | null
-  size: runtime.Decimal | null
+  size: number | null
   folderId: number | null
 }
 
@@ -42,7 +42,7 @@ export type FileMinAggregateOutputType = {
   id: number | null
   fileName: string | null
   fileURL: string | null
-  size: runtime.Decimal | null
+  size: number | null
   uploadTime: Date | null
   folderId: number | null
 }
@@ -51,7 +51,7 @@ export type FileMaxAggregateOutputType = {
   id: number | null
   fileName: string | null
   fileURL: string | null
-  size: runtime.Decimal | null
+  size: number | null
   uploadTime: Date | null
   folderId: number | null
 }
@@ -197,7 +197,7 @@ export type FileGroupByOutputType = {
   id: number
   fileName: string
   fileURL: string
-  size: runtime.Decimal
+  size: number
   uploadTime: Date
   folderId: number
   _count: FileCountAggregateOutputType | null
@@ -229,7 +229,7 @@ export type FileWhereInput = {
   id?: Prisma.IntFilter<"File"> | number
   fileName?: Prisma.StringFilter<"File"> | string
   fileURL?: Prisma.StringFilter<"File"> | string
-  size?: Prisma.DecimalFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFilter<"File"> | number
   uploadTime?: Prisma.DateTimeFilter<"File"> | Date | string
   folderId?: Prisma.IntFilter<"File"> | number
   folder?: Prisma.XOR<Prisma.FolderScalarRelationFilter, Prisma.FolderWhereInput>
@@ -253,7 +253,7 @@ export type FileWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.FileWhereInput | Prisma.FileWhereInput[]
   fileName?: Prisma.StringFilter<"File"> | string
   fileURL?: Prisma.StringFilter<"File"> | string
-  size?: Prisma.DecimalFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFilter<"File"> | number
   uploadTime?: Prisma.DateTimeFilter<"File"> | Date | string
   folderId?: Prisma.IntFilter<"File"> | number
   folder?: Prisma.XOR<Prisma.FolderScalarRelationFilter, Prisma.FolderWhereInput>
@@ -280,7 +280,7 @@ export type FileScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"File"> | number
   fileName?: Prisma.StringWithAggregatesFilter<"File"> | string
   fileURL?: Prisma.StringWithAggregatesFilter<"File"> | string
-  size?: Prisma.DecimalWithAggregatesFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntWithAggregatesFilter<"File"> | number
   uploadTime?: Prisma.DateTimeWithAggregatesFilter<"File"> | Date | string
   folderId?: Prisma.IntWithAggregatesFilter<"File"> | number
 }
@@ -288,7 +288,7 @@ export type FileScalarWhereWithAggregatesInput = {
 export type FileCreateInput = {
   fileName: string
   fileURL: string
-  size: runtime.Decimal | runtime.DecimalJsLike | number | string
+  size: number
   uploadTime: Date | string
   folder: Prisma.FolderCreateNestedOneWithoutFilesInput
 }
@@ -297,7 +297,7 @@ export type FileUncheckedCreateInput = {
   id?: number
   fileName: string
   fileURL: string
-  size: runtime.Decimal | runtime.DecimalJsLike | number | string
+  size: number
   uploadTime: Date | string
   folderId: number
 }
@@ -305,7 +305,7 @@ export type FileUncheckedCreateInput = {
 export type FileUpdateInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   folder?: Prisma.FolderUpdateOneRequiredWithoutFilesNestedInput
 }
@@ -314,7 +314,7 @@ export type FileUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   folderId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -323,7 +323,7 @@ export type FileCreateManyInput = {
   id?: number
   fileName: string
   fileURL: string
-  size: runtime.Decimal | runtime.DecimalJsLike | number | string
+  size: number
   uploadTime: Date | string
   folderId: number
 }
@@ -331,7 +331,7 @@ export type FileCreateManyInput = {
 export type FileUpdateManyMutationInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -339,7 +339,7 @@ export type FileUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   folderId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -440,14 +440,6 @@ export type FileUncheckedUpdateManyWithoutFolderNestedInput = {
   deleteMany?: Prisma.FileScalarWhereInput | Prisma.FileScalarWhereInput[]
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
@@ -455,7 +447,7 @@ export type DateTimeFieldUpdateOperationsInput = {
 export type FileCreateWithoutFolderInput = {
   fileName: string
   fileURL: string
-  size: runtime.Decimal | runtime.DecimalJsLike | number | string
+  size: number
   uploadTime: Date | string
 }
 
@@ -463,7 +455,7 @@ export type FileUncheckedCreateWithoutFolderInput = {
   id?: number
   fileName: string
   fileURL: string
-  size: runtime.Decimal | runtime.DecimalJsLike | number | string
+  size: number
   uploadTime: Date | string
 }
 
@@ -500,7 +492,7 @@ export type FileScalarWhereInput = {
   id?: Prisma.IntFilter<"File"> | number
   fileName?: Prisma.StringFilter<"File"> | string
   fileURL?: Prisma.StringFilter<"File"> | string
-  size?: Prisma.DecimalFilter<"File"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFilter<"File"> | number
   uploadTime?: Prisma.DateTimeFilter<"File"> | Date | string
   folderId?: Prisma.IntFilter<"File"> | number
 }
@@ -509,14 +501,14 @@ export type FileCreateManyFolderInput = {
   id?: number
   fileName: string
   fileURL: string
-  size: runtime.Decimal | runtime.DecimalJsLike | number | string
+  size: number
   uploadTime: Date | string
 }
 
 export type FileUpdateWithoutFolderInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -524,7 +516,7 @@ export type FileUncheckedUpdateWithoutFolderInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -532,7 +524,7 @@ export type FileUncheckedUpdateManyWithoutFolderInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileURL?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
   uploadTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -597,7 +589,7 @@ export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: number
     fileName: string
     fileURL: string
-    size: runtime.Decimal
+    size: number
     uploadTime: Date
     folderId: number
   }, ExtArgs["result"]["file"]>
@@ -1027,7 +1019,7 @@ export interface FileFieldRefs {
   readonly id: Prisma.FieldRef<"File", 'Int'>
   readonly fileName: Prisma.FieldRef<"File", 'String'>
   readonly fileURL: Prisma.FieldRef<"File", 'String'>
-  readonly size: Prisma.FieldRef<"File", 'Decimal'>
+  readonly size: Prisma.FieldRef<"File", 'Int'>
   readonly uploadTime: Prisma.FieldRef<"File", 'DateTime'>
   readonly folderId: Prisma.FieldRef<"File", 'Int'>
 }

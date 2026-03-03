@@ -39,7 +39,7 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
     };
 
     const newFolderResponse = await createFolderFetch(folderObject);
-    if (newFolderResponse && newFolderResponse.ok) {
+    if (newFolderResponse?.ok) {
       const newFolder = await newFolderResponse.json();
       // set rootFolder
       const newRoot = insertInRootFolder(
@@ -86,7 +86,13 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
         <form onSubmit={(e) => createFolder(e)} className={styles.modalForm}>
           {/* Add size, name constraints: */}
           <label htmlFor="folderName">Folder Name:</label>
-          <input type="text" id="folderName" name="folderName" required />
+          <input
+            type="text"
+            id="folderName"
+            name="folderName"
+            required
+            maxLength={25}
+          />
           <button type="submit" onClick={() => clickSound()}>
             Create Folder
           </button>

@@ -7,7 +7,7 @@ export async function uploadFileFetch(formContents: FormData) {
       body: formContents,
     });
 
-    console.log(uploadFile);
+    return uploadFile;
   } catch (e) {
     console.error(e);
     return null;

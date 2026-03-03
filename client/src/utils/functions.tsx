@@ -100,11 +100,14 @@ function recursiveInsert(
 
 export function getPath(folderId: number | undefined, root: Folder | null) {
   if (!folderId || !root) return [{ id: root?.id, folderName: "root" }];
-  const path = recursivePath(root, folderId);
+  const path = recursiveFolderPath(root, folderId);
   return path ?? [{ id: root?.id, folderName: "root" }];
 }
 
-function recursivePath(folder: Folder, folderId: number): Directory[] | null {
+function recursiveFolderPath(
+  folder: Folder,
+  folderId: number,
+): Directory[] | null {
   if (folderId === folder.id) {
     return [{ id: folder.id, folderName: folder.folderName }];
   }
@@ -112,7 +115,7 @@ function recursivePath(folder: Folder, folderId: number): Directory[] | null {
     return null;
   }
   for (let i = 0; i < folder.children.length; i++) {
-    const child: Directory[] | null = recursivePath(
+    const child: Directory[] | null = recursiveFolderPath(
       folder.children[i],
       folderId,
     );
@@ -120,5 +123,53 @@ function recursivePath(folder: Folder, folderId: number): Directory[] | null {
       return [{ id: folder.id, folderName: folder.folderName }, ...child];
     }
   }
+  return null;
+}
+
+export function getFile(fileId: number, root: Folder | null) {
+  if (!root) return null;
+
+  let q = [root];
+
+  while (q.length > 0) {
+    const nextLevel: Folder[] = [];
+
+    for (let i = 0; i < q.length; i++) {
+      for (let j = 0; j < q[i].files.length; j++) {
+        if (q[i].files[j].id === fileId) {
+          return q[i].files[j];
+        }
+      }
+      for (let j = 0; j < q[i].children.length; j++) {
+        nextLevel.push(...q[i].children);
+      }
+      q = nextLevel;
+    }
+  }
+  return null;
+}
+
+export function insertFile(root: Folder, file: File, targetId: number) {
+  if (!targetId) {
+    return { ...root, files: [...root.files, file] };
+  }
+  return recursiveFileInsert(file, targetId, root);
+}
+
+function recursiveFileInsert(file: File, targetId: number, folder: Folder) {
+  if (targetId === folder.id) {
+    return { ...folder, files: [...folder.files, file] };
+  }
+  if (folder.children.length === 0) {
+    return null;
+  }
+  for (let i = 0; i < folder.children.length; i++) {
+    const child = recursiveFileInsert(file, targetId, folder.children[i]);
+    if (child) {
+      folder.children[i] = child as Folder;
+      return { ...folder };
+    }
+  }
+
   return null;
 }

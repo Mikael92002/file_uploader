@@ -1,6 +1,5 @@
 import { useParams } from "react-router";
 import "./App.css";
-import FileUploadForm from "./components/FileUploadForm";
 import { AuthContext } from "./context/AuthContext";
 import { useEffect, useState } from "react";
 import { getCurrentUserFetch, getAllUserFoldersFetch } from "./fetches/fetch";
@@ -17,6 +16,7 @@ import {
   findFolderFromId,
   flatFolderArrayToNestedArray,
 } from "./utils/functions";
+import FileView from "./components/FileView";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -128,8 +128,10 @@ function App() {
                   <LogIn />
                 ) : currPage === "signup" ? (
                   <SignUp />
-                )  : currPage === "home" ? (
+                ) : currPage === "home" ? (
                   <Home />
+                ) : currPage === "file" ? (
+                  <FileView />
                 ) : (
                   <ErrorPage />
                 )}

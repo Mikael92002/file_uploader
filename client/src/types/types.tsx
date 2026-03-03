@@ -12,9 +12,13 @@ export type File = {
   fileName: string;
   fileURL: string;
   size: number;
-  uploadTime: Date;
+  uploadTime: string;
   folderId: number;
 };
+
+export interface FileInterface {
+  file: File
+}
 
 // basically says that follow the File type
 // above but exclude id:
@@ -24,9 +28,9 @@ export type Folder = {
   id: number;
   folderName: string;
   userId: number;
-  files: Array<File>;
+  files: File[];
   parentId: number | null;
-  children: Array<Folder>;
+  children: Folder[];
 };
 
 export type DraftFolder = Omit<
