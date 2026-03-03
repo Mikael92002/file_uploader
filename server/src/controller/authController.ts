@@ -49,7 +49,7 @@ export const signUpPost = [
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({ success: false, errors: errors.array() });
+      res.status(400).json({errors: errors.array() });
       return;
     }
     try {
@@ -69,7 +69,7 @@ export const signUpPost = [
           folders: true,
         },
       });
-      res.json({ success: true, errors: [] });
+      res.json({errors: [] });
     } catch (e) {
       return next(e);
     }

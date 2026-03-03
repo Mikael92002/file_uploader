@@ -8,9 +8,10 @@ import { useLoad } from "../context/LoadContext";
 import { useAudio } from "../context/AudioContext";
 import folderImg from "../assets/folder.png";
 import { useFolder } from "../context/FolderContext";
-import { getPath } from "../utils/functions";
+import { getPath, recursiveFolderDelete } from "../utils/functions";
 import FolderCreateForm from "./FolderCreateForm";
 import FileUploadForm from "./FileUploadForm";
+import { deleteFolderFetch } from "../fetches/fetch";
 
 const Home = () => {
   // setCurrFolder called whenever:
@@ -88,24 +89,29 @@ const Home = () => {
         <div className={styles.folder_files_container}>
           {currentFolder?.children?.map((folder) => {
             return (
-              <div
-                className={styles.folder_files_div}
-                onClick={() => {
-                  clickSound();
-                  navigate(`/home/${folder.id}`);
-                }}
-                key={folder.id}
-              >
-                <img
-                  src={folderImg}
-                  alt="folder image"
-                  width="40px"
-                  height="40px"
-                />
-                <div className={styles.folder_files_name_div}>
-                  {folder.folderName}
+              <>
+                <div
+                  className={styles.folder_files_div}
+                  onClick={() => {
+                    clickSound();
+                    navigate(`/home/${folder.id}`);
+                  }}
+                  key={folder.id}
+                >
+                  <img
+                    src={folderImg}
+                    alt="folder image"
+                    width="40px"
+                    height="40px"
+                  />
+                  <div className={styles.folder_files_name_div}>
+                    {folder.folderName}
+                  </div>
                 </div>
-              </div>
+                <button onClick={() => {
+                  //************ */ TO DELETE!!!!!!!!!!!!!!!!! setRootFolder to:
+                  console.log(recursiveFolderDelete(folder.id, rootFolder!));
+                }}>Del fol</button></>
             );
           })}
           {currentFolder?.files?.map((file) => {

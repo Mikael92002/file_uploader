@@ -108,3 +108,22 @@ export async function getAllUserFoldersFetch(id: number) {
     return null;
   }
 }
+
+export async function deleteFolderFetch(id: number){
+  try{
+    const response = await fetch(`/api/folder/${id}`, {
+      method: 'DELETE'
+    });
+    if(response.ok){
+      const json = await response.json();
+      console.log(json);
+      return json;
+    }
+    else{
+      throw new Error(`Response not ok: ${response.status}`);
+    }
+  }catch(e){
+    console.error(e);
+    return null;
+  }
+}

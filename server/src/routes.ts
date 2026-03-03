@@ -4,9 +4,11 @@ import { fileUploadSuccess } from "./controller/fileController";
 import { upload as uploadMiddleWare } from "./middleware/uploadMiddleWare";
 import { logInPost, signOutGet, signUpPost } from "./controller/authController";
 import {
+  folderDelete,
   getAllUserFolders,
   postNewFolder,
 } from "./controller/folderController";
+import { deleteFolder } from "./db/queries";
 
 export const userRoute = Router();
 export const fileRouter = Router();
@@ -30,3 +32,4 @@ authRouter.get("/signout", signOutGet);
 //folderRoute:
 folderRouter.post("/", postNewFolder);
 folderRouter.get("/:userId", getAllUserFolders);
+folderRouter.delete("/:folderId", folderDelete);

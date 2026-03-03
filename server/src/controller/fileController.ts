@@ -11,12 +11,12 @@ export const fileUploadSuccess = async (
   if (!req.user) {
     return res
       .status(401)
-      .json({ success: false, error: "No user found from cookie" });
+      .json({error: "No user found from cookie" });
   }
 
   // should not happen if front end validated with "required":
   if (!req.file) {
-    return res.status(400).json({ success: false, error: "No file uploaded" });
+    return res.status(400).json({error: "No file uploaded" });
   }
   const maxSize = 5 * 1024 * 1024;
   const fileSize = req.file.size;
@@ -30,5 +30,6 @@ export const fileUploadSuccess = async (
   // upload file to db:
   const newFile = await createNewFile(fileName, fileURL, fileSize, folderId);
   console.log(newFile);
-  res.status(200).json({ success: true, newFile});
+  res.status(200).json({newFile});
 };
+

@@ -48,3 +48,12 @@ export async function getAllFoldersFromUserId(id: number) {
   });
   return folders;
 }
+
+export async function deleteFolder(id: number) {
+  const deletedFolder = await prisma.folder.delete({
+    where: {
+      id: id,
+    }
+  })
+  return deletedFolder;
+}
