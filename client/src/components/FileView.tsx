@@ -1,11 +1,11 @@
 import { Link, useNavigate, useParams } from "react-router";
 import styles from "../css modules/FileView.module.css";
-import type { FileInterface } from "../types/types";
 import { useMemo } from "react";
 import { useFolder } from "../context/FolderContext";
 import { getFile } from "../utils/functions";
 import ErrorPage from "../error pages/ErrorPage";
 import { useAudio } from "../context/AudioContext";
+import load from "../css modules/Load.module.css";
 
 // ends in: /:file/:folderId
 
@@ -22,7 +22,7 @@ const FileView = () => {
     return <ErrorPage />;
   } else
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} ${load.load_container}`}>
         <div className={styles.leftContainer}>
           <h2 className={styles.fileName}>{file.fileName}</h2>
           <div className={styles.img_container}>

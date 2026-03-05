@@ -2,7 +2,6 @@
     border: 1px solid green;
     display: flex;
     justify-content: space-around;
-    height: 100%;
 }
 
 .leftContainer {
@@ -24,20 +23,22 @@
 }
 
 .leftContainer>div {
-    flex-basis: 100%;
+    
 }
 
 .img_container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    /* height: 100%; */
     justify-content: center;
+    align-items: center;
     border: 1px solid #6CC417;
 }
 
 .img_container>img {
     width: 100%;
-    flex-grow:0;
+    object-fit: contain;
+    aspect-ratio: 12/9;
 }
 
 .rightContainer>h2{

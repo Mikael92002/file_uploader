@@ -4,7 +4,7 @@ import styles from "../css modules/Home.module.css";
 import { useState } from "react";
 import { useFolder } from "../context/FolderContext";
 import { insertFile } from "../utils/functions";
-import type { File, Folder } from "../types/types";
+import type { Folder } from "../types/types";
 interface FileForm {
   folderId: number;
 }
