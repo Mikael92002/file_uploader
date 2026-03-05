@@ -127,3 +127,7 @@ export async function deleteFolderFetch(id: number){
     return null;
   }
 }
+
+export async function deleteFileFromDbFetch(){
+  
+}

@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { getCurrentUserFromCookie } from "./controller/userController";
-import { fileUploadSuccess } from "./controller/fileController";
+import {
+  deleteFileFromCloudinaryAndDb,
+  deleteManyFiles,
+  fileUploadSuccess,
+} from "./controller/fileController";
 import { upload as uploadMiddleWare } from "./middleware/uploadMiddleWare";
 import { logInPost, signOutGet, signUpPost } from "./controller/authController";
 import {
@@ -8,7 +12,6 @@ import {
   getAllUserFolders,
   postNewFolder,
 } from "./controller/folderController";
-import { deleteFolder } from "./db/queries";
 
 export const userRoute = Router();
 export const fileRouter = Router();
@@ -23,6 +26,8 @@ userRoute.get("/", getCurrentUserFromCookie);
 // must be uploaded to a userID:
 const upload = uploadMiddleWare("fileFolder");
 fileRouter.post("/upload", upload.single("file"), fileUploadSuccess);
+fileRouter.delete("/:fileId", deleteFileFromCloudinaryAndDb);
+fileRouter.delete("/delete", deleteManyFiles);
 
 // formRoute:
 authRouter.post("/login", logInPost);

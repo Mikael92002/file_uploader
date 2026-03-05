@@ -53,7 +53,16 @@ export async function deleteFolder(id: number) {
   const deletedFolder = await prisma.folder.delete({
     where: {
       id: id,
-    }
-  })
+    },
+  });
   return deletedFolder;
+}
+
+export async function deleteFile(id: number) {
+  const deletedFile = await prisma.file.delete({
+    where: {
+      id: id,
+    },
+  });
+  return deletedFile;
 }
