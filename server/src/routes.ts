@@ -26,8 +26,8 @@ userRoute.get("/", getCurrentUserFromCookie);
 // must be uploaded to a userID:
 const upload = uploadMiddleWare("fileFolder");
 fileRouter.post("/upload", upload.single("file"), fileUploadSuccess);
-fileRouter.delete("/:fileId", deleteFileFromCloudinaryAndDb);
 fileRouter.delete("/delete", deleteManyFiles);
+fileRouter.delete("/:fileId", deleteFileFromCloudinaryAndDb);
 
 // formRoute:
 authRouter.post("/login", logInPost);

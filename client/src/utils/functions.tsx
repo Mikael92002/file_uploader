@@ -174,23 +174,64 @@ function recursiveFileInsert(file: File, targetId: number, folder: Folder) {
   return null;
 }
 
-export function recursiveFolderDelete(id: number, folder: Folder){
+export function recursiveFolderDelete(id: number, folder: Folder) {
   // id can never be root id
-  if(id === folder.id){
+  if (id === folder.id) {
     return folder;
   }
-  if(folder.children.length === 0){
+  if (folder.children.length === 0) {
     return null;
   }
-  for(let i = 0;i<folder.children.length;i++){
+  for (let i = 0; i < folder.children.length; i++) {
     const child = recursiveFolderDelete(id, folder.children[i]);
-    if(child){
+    if (child) {
       const newChildArr = folder.children.filter((childObj) => {
         if (childObj !== folder.children[i]) {
           return childObj;
         }
       });
       return { ...folder, children: newChildArr };
+    }
+  }
+  return null;
+}
+
+export function recursiveFileGet(folder: Folder) {
+  let q = [folder];
+  const fileURLArr: Array<{ fileURL: string }> = [];
+  while (q.length > 0) {
+    const nextLevel: Folder[] = [];
+    for (let i = 0; i < q.length; i++) {
+      for (let j = 0; j < q[i].files.length; j++) {
+        fileURLArr.push({ fileURL: q[i].files[j].fileURL });
+      }
+      nextLevel.push(...q[i].children);
+    }
+    q = nextLevel;
+  }
+  return fileURLArr;
+}
+
+export function recursiveFileDelete(targetId: number, folder: Folder) {
+  for (let i = 0; i < folder.files.length; i++) {
+    if (folder.files[i].id === targetId) {
+      return folder;
+    }
+  }
+  if (folder.children.length === 0) {
+    return null;
+  }
+  for (let i = 0; i < folder.children.length; i++) {
+    const child: Folder | null = recursiveFileDelete(
+      targetId,
+      folder.children[i],
+    );
+    if (child) {
+      const newFileArr = folder.children[i].files.filter((fileChild) => {
+        return fileChild.id !== targetId;
+      });
+      folder.children[i] = { ...folder.children[i], files: newFileArr };
+      return { ...folder };
     }
   }
   return null;

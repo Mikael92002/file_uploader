@@ -27,6 +27,7 @@ const FileUploadForm = ({ folderId }: FileForm) => {
 
   async function uploadForm(e: React.SubmitEvent) {
     e.preventDefault();
+    closeModal();
     const formData = new FormData(e.target);
     formData.append("folderId", String(folderId));
     console.log(formData);
@@ -37,9 +38,7 @@ const FileUploadForm = ({ folderId }: FileForm) => {
       const json = await response.json();
       const newRoot = insertFile(rootFolder!, json.newFile, folderId) as Folder;
       setRootFolder(newRoot);
-      closeModal();
     }
-    console.log(response);
   }
   const tempStyle = {
     backgroundColor: "white",

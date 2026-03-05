@@ -135,9 +135,6 @@ function App() {
                 ) : (
                   <ErrorPage />
                 )}
-                <button onClick={() => console.log(currentFolder)}>
-                  click
-                </button>
               </FolderContext>
             </AudioContext>
           </LoadContext>

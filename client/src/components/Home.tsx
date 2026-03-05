@@ -93,9 +93,6 @@ const Home = () => {
             <FileIterator></FileIterator>
           </div>
         </div>
-        <button onClick={() => console.log(getPath(35, rootFolder!))}>
-          path
-        </button>
       </div>
     );
 };

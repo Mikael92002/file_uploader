@@ -84,10 +84,14 @@ span {
     height: 30px;
     flex-shrink: 0;
 }
-.folder_files_master_container{
+
+.folder_files_master_container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    margin: 20px 20px 0px 20px;
+
 }
 
 .folder_files_container {
@@ -100,12 +104,15 @@ span {
     grid-template-columns: repeat(auto-fit, minmax(50px, 150px));
     grid-auto-rows: min-content;
 }
-.trash_container{
-width: fit-content;
+
+.trash_container {
+    width: fit-content;
 }
 
 .folder_files_div {
-    margin: 20px 20px 0px 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
     transition: background-color, box-shadow 0.1s ease-out
 }
 

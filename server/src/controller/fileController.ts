@@ -32,21 +32,6 @@ export const fileUploadSuccess = async (
   res.status(200).json({ newFile });
 };
 
-export const deleteFileFromCloudinaryAndDb = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  if (!req.user) {
-    next(new CustomError("File delete failed: user not found", 401));
-  }
-  const deletedFile = await deleteFile(Number(req.params.fileId));
-  if (deletedFile) {
-    deleteFileFromCloudinary(urlExtractor(deletedFile.fileURL)!);
-  }
-  res.json(deletedFile);
-};
-
 function urlExtractor(url: string) {
   if (!url) {
     console.log("URL is undefined/null");
@@ -57,13 +42,34 @@ function urlExtractor(url: string) {
   for (let i = 0; i < splitURL.length; i++) {
     if (splitURL[i] === "fileFolder") {
       for (let j = i; j < splitURL.length; j++) {
-        extractedURL.concat(splitURL[j]! + "/");
+        extractedURL =
+          j !== i
+            ? extractedURL + "/" + splitURL[j]
+            : extractedURL + splitURL[j];
       }
-      return extractedURL;
+      const splitExtractedURL = extractedURL.split(".");
+      return splitExtractedURL[0];
     }
   }
   return null;
 }
+
+export const deleteFileFromCloudinaryAndDb = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (!req.user) {
+    next(new CustomError("File delete failed: user not found", 401));
+  }
+  const deletedFile = await deleteFile(Number(req.params.fileId));
+  if (deletedFile) {
+    const extractedURL = urlExtractor(deletedFile.fileURL);
+    deleteFileFromCloudinary(extractedURL!);
+  }
+  res.json(deletedFile);
+};
+
 
 export const deleteManyFiles = async (
   req: Request,
@@ -73,9 +79,9 @@ export const deleteManyFiles = async (
   if (!req.user) {
     next(new CustomError("Delete many files failed: no user found", 401));
   }
-  const arrayOfFileURLS: [{ URL: string }] = JSON.parse(req.body);
+  const arrayOfFileURLS: Array<{fileURL: string}> = req.body;
   for (let i = 0; i < arrayOfFileURLS.length; i++) {
-    const extractedURL = urlExtractor(arrayOfFileURLS[i]?.URL!);
+    const extractedURL = urlExtractor(arrayOfFileURLS[i]?.fileURL!);
     if (extractedURL) {
       deleteFileFromCloudinary(extractedURL);
     }

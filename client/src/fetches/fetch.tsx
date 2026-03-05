@@ -109,25 +109,53 @@ export async function getAllUserFoldersFetch(id: number) {
   }
 }
 
-export async function deleteFolderFetch(id: number){
-  try{
+export async function deleteFolderFetch(id: number) {
+  try {
     const response = await fetch(`/api/folder/${id}`, {
-      method: 'DELETE'
+      method: "DELETE",
     });
-    if(response.ok){
+    if (response.ok) {
       const json = await response.json();
       console.log(json);
       return json;
-    }
-    else{
+    } else {
       throw new Error(`Response not ok: ${response.status}`);
     }
-  }catch(e){
+  } catch (e) {
     console.error(e);
     return null;
   }
 }
 
-export async function deleteFileFromDbFetch(){
-  
+export async function deleteSingleFileFromDbAndCloudinaryFetch(fileId: number) {
+  try {
+    const deleteFileResponse = await fetch(`/api/file/${fileId}`, {
+      method: "DELETE",
+    });
+    if (!deleteFileResponse.ok) {
+      throw new Error(`Response not ok: ${deleteFileResponse.status}`);
+    }
+    return await deleteFileResponse.json();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function deleteManyFilesFetch(data: Array<{ fileURL: string }>) {
+  console.log(JSON.stringify(data));
+  try {
+    const deleteManyFilesResponse = await fetch(`/api/file/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!deleteManyFilesResponse.ok) {
+      throw new Error("Response not ok: " + deleteManyFilesResponse.status);
+    }
+    return await deleteManyFilesResponse.json();
+  } catch (e) {
+    console.error(e);
+  }
 }

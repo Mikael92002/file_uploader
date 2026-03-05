@@ -3,9 +3,9 @@ import { useNavigate } from "react-router";
 import { useFolder } from "../context/FolderContext";
 import styles from "../css modules/Home.module.css";
 import folderImg from "../assets/folder.png";
-import { deleteFolderFetch } from "../fetches/fetch";
+import { deleteFolderFetch, deleteManyFilesFetch } from "../fetches/fetch";
 import type { Folder } from "../types/types";
-import { recursiveFolderDelete } from "../utils/functions";
+import { recursiveFileGet, recursiveFolderDelete } from "../utils/functions";
 import TrashSvg from "./TrashSvg";
 
 const FolderIterator = () => {
@@ -21,6 +21,8 @@ const FolderIterator = () => {
       )
     ) {
       try {
+        const fileArr = recursiveFileGet(folder);
+        await deleteManyFilesFetch(fileArr);
         const deletedFolder = await deleteFolderFetch(folder.id);
         if (deletedFolder) {
           setRootFolder(recursiveFolderDelete(folder.id, rootFolder!));
