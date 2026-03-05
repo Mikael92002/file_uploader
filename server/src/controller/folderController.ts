@@ -1,5 +1,6 @@
 import {
   createNewFolder,
+  deleteFolder,
   getAllFoldersFromUserId,
 } from "../db/queries";
 import { NextFunction, Request, Response } from "express";
@@ -34,6 +35,16 @@ export const getAllUserFolders = async (
   }
 
   const prismaQuery = await getAllFoldersFromUserId(Number(req.params.userId));
-  
-  res.json(prismaQuery );
+
+  res.json(prismaQuery);
 };
+
+export const folderDelete = async (
+  req: Request, res: Response, next: NextFunction
+) => {
+  if (!req.user) {
+    next(new CustomError("Folder delete failed: no user found", 401))
+  };
+  const prismaQuery = await deleteFolder(Number(req.params.folderId));
+  res.json(prismaQuery);
+}

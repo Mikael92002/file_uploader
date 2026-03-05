@@ -173,3 +173,25 @@ function recursiveFileInsert(file: File, targetId: number, folder: Folder) {
 
   return null;
 }
+
+export function recursiveFolderDelete(id: number, folder: Folder){
+  // id can never be root id
+  if(id === folder.id){
+    return folder;
+  }
+  if(folder.children.length === 0){
+    return null;
+  }
+  for(let i = 0;i<folder.children.length;i++){
+    const child = recursiveFolderDelete(id, folder.children[i]);
+    if(child){
+      const newChildArr = folder.children.filter((childObj) => {
+        if (childObj !== folder.children[i]) {
+          return childObj;
+        }
+      });
+      return { ...folder, children: newChildArr };
+    }
+  }
+  return null;
+}

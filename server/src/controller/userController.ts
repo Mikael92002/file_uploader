@@ -8,7 +8,6 @@ export const getCurrentUserFromCookie = async (
 ) => {
   if (req.user) {
     res.json({
-      success: true,
       user: { id: req.user.id, username: req.user.username },
     });
   } else {
