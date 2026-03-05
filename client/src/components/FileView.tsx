@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styles from "../css modules/FileView.module.css";
 import { useMemo } from "react";
 import { useFolder } from "../context/FolderContext";

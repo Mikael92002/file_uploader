@@ -101,7 +101,7 @@ function recursiveInsert(
 export function getPath(folderId: number | undefined, root: Folder | null) {
   if (!folderId || !root) return [{ id: root?.id, folderName: "root" }];
   const path = recursiveFolderPath(root, folderId);
-  return path ?? [{ id: root?.id, folderName: "root" }];
+  return path ?? null;
 }
 
 function recursiveFolderPath(

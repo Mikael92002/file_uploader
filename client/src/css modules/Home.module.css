@@ -84,6 +84,11 @@ span {
     height: 30px;
     flex-shrink: 0;
 }
+.folder_files_master_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .folder_files_container {
     border: 1px solid green;
@@ -94,6 +99,9 @@ span {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, 150px));
     grid-auto-rows: min-content;
+}
+.trash_container{
+width: fit-content;
 }
 
 .folder_files_div {
