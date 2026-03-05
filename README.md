@@ -149,8 +149,6 @@ cd ..
 server/src/middleware/cloudinaryConfig.ts
 ```
 
-# File Uploader
-
 ## Running the Application
 
 ### Development Mode
