@@ -22,10 +22,6 @@
     border: 1px solid #6CC417
 }
 
-.leftContainer>div {
-    
-}
-
 .img_container {
     display: flex;
     flex-direction: column;
