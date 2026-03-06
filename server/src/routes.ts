@@ -12,11 +12,13 @@ import {
   getAllUserFolders,
   postNewFolder,
 } from "./controller/folderController";
+import { getHealth } from "./controller/healthController";
 
 export const userRoute = Router();
 export const fileRouter = Router();
 export const authRouter = Router();
 export const folderRouter = Router();
+export const healthRouter = Router();
 
 // userRoute:
 userRoute.get("/", getCurrentUserFromCookie);
@@ -38,3 +40,6 @@ authRouter.get("/signout", signOutGet);
 folderRouter.post("/", postNewFolder);
 folderRouter.get("/:userId", getAllUserFolders);
 folderRouter.delete("/:folderId", folderDelete);
+
+//healthRoute (to ping render):
+healthRouter.get("/", getHealth);

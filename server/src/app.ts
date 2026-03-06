@@ -7,7 +7,13 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import expressSession from "express-session";
 import "./middleware/auth";
 import passport from "passport";
-import { fileRouter, authRouter, userRoute, folderRouter } from "./routes";
+import {
+  fileRouter,
+  authRouter,
+  userRoute,
+  folderRouter,
+  healthRouter,
+} from "./routes";
 import cors from "cors";
 
 const connectionString = `${process.env.DATABASE_URL}`;
@@ -52,7 +58,6 @@ app.use(
   }),
 );
 
-
 // 4. passport:
 app.use(passport.initialize());
 app.use(passport.session());
@@ -62,6 +67,7 @@ app.use("/api/user", userRoute);
 app.use("/api/file", fileRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/folder", folderRouter);
+app.use("/api/health", healthRouter);
 
 // 6. error handler:
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
