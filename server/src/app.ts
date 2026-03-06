@@ -43,10 +43,10 @@ app.use("/api/auth", authRouter);
 app.use("/api/folder", folderRouter);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/members-only/dist")));
+  app.use(express.static(path.join(__dirname, "../client/dist")));
   app.get("/{*splat}", (req: Request, res: Response) => {
     res.sendFile(
-      path.join(__dirname, "../client/members-only/dist", "index.html"),
+      path.join(__dirname, "../client/dist", "index.html"),
     );
   });
 }
