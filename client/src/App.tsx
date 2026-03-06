@@ -124,7 +124,7 @@ function App() {
                   }}
                 >
                   <Header></Header>
-                  {currPage === "login" ? (
+                  {currPage === "login" || undefined ? (
                     <LogIn />
                   ) : currPage === "signup" ? (
                     <SignUp />
