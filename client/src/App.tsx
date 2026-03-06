@@ -93,54 +93,56 @@ function App() {
     audio.play();
   }
 
-  if (isLoading) {
-    return (
-      <>
-        <AuthContext value={{ currentUser, setCurrentUser }}>
-          <AudioContext value={{ clickSound }}>
-            <Header></Header>
-          </AudioContext>
-        </AuthContext>
-        <div className={`load-container ${initiateFade === true && "fade"}`}>
-          <div className="loader-text">LOADING...</div>
-          <div className="loader"></div>
-        </div>
-      </>
-    );
-  } else
-    return (
-      <>
-        <AuthContext value={{ currentUser, setCurrentUser }}>
-          <LoadContext
-            value={{ isLoading, setLoadToFalse, setLoadToTrue, navLoad }}
-          >
+  return (
+    <>
+      {isLoading ? (
+        <>
+          <AuthContext value={{ currentUser, setCurrentUser }}>
             <AudioContext value={{ clickSound }}>
-              <FolderContext
-                value={{
-                  currentFolder,
-                  rootFolder,
-                  setCurrentFolder,
-                  setRootFolder,
-                }}
-              >
-                <Header></Header>
-                {currPage === "login" ? (
-                  <LogIn />
-                ) : currPage === "signup" ? (
-                  <SignUp />
-                ) : currPage === "home" ? (
-                  <Home />
-                ) : currPage === "file" ? (
-                  <FileView />
-                ) : (
-                  <ErrorPage />
-                )}
-              </FolderContext>
+              <Header></Header>
             </AudioContext>
-          </LoadContext>
-        </AuthContext>
-      </>
-    );
+          </AuthContext>
+          <div className={`load-container ${initiateFade === true && "fade"}`}>
+            <div className="loader-text">LOADING...</div>
+            <div className="loader"></div>
+          </div>
+        </>
+      ) : (
+        <>
+          {" "}
+          <AuthContext value={{ currentUser, setCurrentUser }}>
+            <LoadContext
+              value={{ isLoading, setLoadToFalse, setLoadToTrue, navLoad }}
+            >
+              <AudioContext value={{ clickSound }}>
+                <FolderContext
+                  value={{
+                    currentFolder,
+                    rootFolder,
+                    setCurrentFolder,
+                    setRootFolder,
+                  }}
+                >
+                  <Header></Header>
+                  {currPage === "login" ? (
+                    <LogIn />
+                  ) : currPage === "signup" ? (
+                    <SignUp />
+                  ) : currPage === "home" ? (
+                    <Home />
+                  ) : currPage === "file" ? (
+                    <FileView />
+                  ) : (
+                    <ErrorPage />
+                  )}
+                </FolderContext>
+              </AudioContext>
+            </LoadContext>
+          </AuthContext>
+        </>
+      )}
+    </>
+  );
 }
 
 export default App;
