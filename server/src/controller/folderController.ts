@@ -16,7 +16,6 @@ export const postNewFolder = async (
   }
 
   const userId = req.user.id;
-  console.log(req.body);
   const { folderName, parentId } = req.body;
   const query = await createNewFolder(userId, folderName, parentId);
   res.json(query);

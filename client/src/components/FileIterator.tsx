@@ -21,7 +21,7 @@ const FileIterator = () => {
   }
 
   async function deleteFile(file: File) {
-    if (confirm(`Are you sure you want to delete the file ${file.fileName}?`)) {
+    if (confirm(`Are you sure you want to delete the file "${file.fileName}"?`)) {
       const deletedFile = await deleteSingleFileFromDbAndCloudinaryFetch(
         file.id,
       );

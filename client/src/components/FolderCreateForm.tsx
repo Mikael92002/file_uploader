@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Modal from "react-modal";
-import styles from "../css modules/Home.module.css";
+import styles from "../css modules/Modal.module.css";
 import { createFolderFetch } from "../fetches/fetch";
 import type { DraftFolder } from "../types/types";
 import { useFolder } from "../context/FolderContext";

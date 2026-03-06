@@ -31,7 +31,6 @@ const LogIn = () => {
 
     const formDataAsObj = Object.fromEntries(new FormData(e.target));
     const logInResponse = await logInFetch(formDataAsObj);
-    // console.log(logInResponse);
     if (logInResponse?.url.endsWith("/success")) {
       setErrorMessage("");
       setCurrentUser(await getCurrentUserFetch());

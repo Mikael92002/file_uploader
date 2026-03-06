@@ -116,7 +116,6 @@ export async function deleteFolderFetch(id: number) {
     });
     if (response.ok) {
       const json = await response.json();
-      console.log(json);
       return json;
     } else {
       throw new Error(`Response not ok: ${response.status}`);
@@ -142,7 +141,6 @@ export async function deleteSingleFileFromDbAndCloudinaryFetch(fileId: number) {
 }
 
 export async function deleteManyFilesFetch(data: Array<{ fileURL: string }>) {
-  console.log(JSON.stringify(data));
   try {
     const deleteManyFilesResponse = await fetch(`/api/file/delete`, {
       method: "DELETE",

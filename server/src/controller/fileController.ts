@@ -28,13 +28,12 @@ export const fileUploadSuccess = async (
   const fileName = req.body.fileName;
   // upload file to db:
   const newFile = await createNewFile(fileName, fileURL, fileSize, folderId);
-  console.log(newFile);
   res.status(200).json({ newFile });
 };
 
 function urlExtractor(url: string) {
   if (!url) {
-    console.log("URL is undefined/null");
+    console.error("URL is undefined/null");
     return null;
   }
   const splitURL = url.split("/");

@@ -215,7 +215,11 @@ export function recursiveFileGet(folder: Folder) {
 export function recursiveFileDelete(targetId: number, folder: Folder) {
   for (let i = 0; i < folder.files.length; i++) {
     if (folder.files[i].id === targetId) {
-      return folder;
+      const newFileArr = folder.files.filter((file) => {
+        return file.id !== targetId;
+      });
+      folder.files = [...newFileArr];
+      return { ...folder };
     }
   }
   if (folder.children.length === 0) {
@@ -227,10 +231,6 @@ export function recursiveFileDelete(targetId: number, folder: Folder) {
       folder.children[i],
     );
     if (child) {
-      const newFileArr = folder.children[i].files.filter((fileChild) => {
-        return fileChild.id !== targetId;
-      });
-      folder.children[i] = { ...folder.children[i], files: newFileArr };
       return { ...folder };
     }
   }
