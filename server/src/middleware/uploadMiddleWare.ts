@@ -3,6 +3,7 @@ import {CloudinaryStorage} from "multer-storage-cloudinary";
 import cloudinary from "./cloudinaryConfig";
 import path from "node:path";
 import { Request } from "express";
+import { CustomError } from "../Errors/CustomError";
 
 
 export const upload = (folderName: string) => {
@@ -41,6 +42,6 @@ function checkFileType(
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    return cb(null, false);
+    return cb(new CustomError(`File upload failed: ${path.extname(file.originalname)} not supported`, 415));
   }
 }

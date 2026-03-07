@@ -1,6 +1,6 @@
 import type { DraftFolder } from "../types/types";
 
-const apiUrl = import.meta.env.VITE_API_URL || "/api";
+const apiUrl = import.meta.env.VITE_API_URL || "";
 
 export async function uploadFileFetch(formContents: FormData) {
   try {

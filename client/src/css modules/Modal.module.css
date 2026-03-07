@@ -68,3 +68,11 @@ form{
     gap: 3px;
     display: flex;
 }
+
+.error{
+    color: red;
+}
+
+.info{
+    color: yellow
+}

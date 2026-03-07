@@ -5,7 +5,7 @@ import {
   deleteManyFiles,
   fileUploadSuccess,
 } from "./controller/fileController";
-import { upload as uploadMiddleWare } from "./middleware/uploadMiddleWare";
+import { upload } from "./middleware/uploadMiddleWare";
 import { logInPost, signOutGet, signUpPost } from "./controller/authController";
 import {
   folderDelete,
@@ -26,8 +26,11 @@ userRoute.get("/", getCurrentUserFromCookie);
 
 // fileRoute:
 // must be uploaded to a userID:
-const upload = uploadMiddleWare("fileFolder");
-fileRouter.post("/upload", upload.single("file"), fileUploadSuccess);
+fileRouter.post(
+  "/upload",
+  upload("fileFolder").single("file"),
+  ...fileUploadSuccess,
+);
 fileRouter.delete("/delete", deleteManyFiles);
 fileRouter.delete("/:fileId", deleteFileFromCloudinaryAndDb);
 

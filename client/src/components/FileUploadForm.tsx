@@ -14,6 +14,8 @@ const FileUploadForm = ({ folderId }: FileForm) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { setRootFolder, rootFolder } = useFolder();
   const { clickSound } = useAudio();
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [error, setErrors] = useState("");
 
   function openModal() {
     setIsOpen(true);
@@ -24,21 +26,29 @@ const FileUploadForm = ({ folderId }: FileForm) => {
   }
 
   function closeModal() {
+    setErrors("");
     setIsOpen(false);
   }
 
   async function uploadForm(e: React.SubmitEvent) {
     e.preventDefault();
-    closeModal();
     const formData = new FormData(e.target);
+    formData.set("fileName", String(formData.get("fileName"))!.trim());
     formData.append("folderId", String(folderId));
 
     // in server: req.file = "file"
+    setIsWaiting(true);
     const response = await uploadFileFetch(formData);
+    const json = await response?.json();
+    setIsWaiting(false);
     if (response?.ok) {
-      const json = await response.json();
       const newRoot = insertFile(rootFolder!, json.newFile, folderId) as Folder;
       setRootFolder(newRoot);
+      closeModal();
+    } else if (response?.status === 400) {
+      setErrors(json.error[0].msg);
+    } else if (response?.status === 415) {
+      setErrors(json.message);
     }
   }
 
@@ -72,6 +82,7 @@ const FileUploadForm = ({ folderId }: FileForm) => {
           X
         </button>
         <form onSubmit={(e) => uploadForm(e)}>
+          <div className={styles.error}>{error}</div>
           <div className={styles.fileName_input_label_container}>
             <label htmlFor="file_name">File Name:</label>
             <input
@@ -86,9 +97,16 @@ const FileUploadForm = ({ folderId }: FileForm) => {
             <label htmlFor="file_upload">File:</label>
             <input type="file" name="file" required id="file_upload" />
           </div>
-          <button type="submit" onClick={() => clickSound()}>
-            Upload
-          </button>
+          {isWaiting ? (
+            <button disabled>Please wait...</button>
+          ) : (
+            <button type="submit" onClick={() => clickSound()}>
+              Upload File
+            </button>
+          )}
+          <div className={styles.info}>
+            File types supported: jpeg/jpg/png/gif
+          </div>
         </form>
       </Modal>
     </>

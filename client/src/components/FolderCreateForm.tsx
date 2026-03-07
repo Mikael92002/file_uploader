@@ -16,6 +16,7 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { setRootFolder, rootFolder } = useFolder();
   const { folderId } = useParams();
+  const [isWaiting, setIsWaiting] = useState(false);
 
   function openModal() {
     setIsOpen(true);
@@ -37,8 +38,9 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
       folderName: folderName!,
       parentId: folderParentId,
     };
-
+    setIsWaiting(true);
     const newFolderResponse = await createFolderFetch(folderObject);
+    setIsWaiting(false);
     if (newFolderResponse?.ok) {
       const newFolder = await newFolderResponse.json();
       // set rootFolder
@@ -93,9 +95,13 @@ const FolderCreateForm = ({ folderParentId, clickSound }: FolderForm) => {
             required
             maxLength={25}
           />
-          <button type="submit" onClick={() => clickSound()}>
-            Create Folder
-          </button>
+          {isWaiting ? (
+            <button disabled>Please wait...</button>
+          ) : (
+            <button type="submit" onClick={() => clickSound()}>
+              Create Folder
+            </button>
+          )}
         </form>
       </Modal>
     </>
