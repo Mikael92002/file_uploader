@@ -8,8 +8,8 @@ A high-performance file management system featuring nested directory structures,
 
 - **Recursive Folder Architecture**: Implemented a self-referencing PostgreSQL schema to support infinite folder nesting with `onDelete: Cascade` referential integrity.
 - **Secure Authentication**: Engineered a session-based auth flow using Passport.js and express-session, with persistent storage in PostgreSQL via Prisma.
-- **Optimized File Handling**: Integrated Cloudinary API for automated image transformations and CDN-based delivery, reducing server-side processing overhead.
-- **Type-Safe Database Layer**: Utilized Prisma ORM with custom TypeScript interfaces to ensure end-to-end type safety from the database to the UI.
+- **Optimized File Handling**: Integrated Cloudinary API for image uploads, reducing server-side processing overhead.
+- **Type-Safe Database Layer**: Utilized Prisma ORM with custom TypeScript interfaces to ensure type safety from the database to the UI.
 - **Relational Logic**: Leveraged composite unique constraints `@@unique([fileName, folderId])` to maintain data integrity across shared directories.
 
 ---
@@ -29,8 +29,8 @@ A high-performance file management system featuring nested directory structures,
 
 The application is split into a decoupled monorepo for independent scaling.
 
-- **Server** — A RESTful API focused on controller-service patterns and middleware validation.
-- **Client** — A component-based SPA utilizing breadcrumb navigation and recursive rendering for folder trees.
+- **Server**: A RESTful API focused on controller-service patterns and middleware validation.
+- **Client**: A component-based SPA utilizing breadcrumb navigation and recursive rendering for folder trees.
 
 ---
 
