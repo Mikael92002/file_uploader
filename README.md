@@ -1,16 +1,16 @@
 # File Uploader
 
-A high-performance file management system featuring nested directory structures, secure cloud storage, and relational data integrity. Built with a modern TypeScript stack, this project demonstrates a deep dive into recursive data handling and scalable backend architecture.
+An advanced file management system featuring nested directories, cloud storage, and relational database integration. Built with TypeScript, this project demonstrates recursive data handling and state management in the frontend. The backend handles authentication, cloud storage API interactions, and database operations through prisma.
 
 ---
 
 ## Highlights
 
-- **Recursive Folder Architecture**: Implemented a self-referencing PostgreSQL schema to support infinite folder nesting with `onDelete: Cascade` referential integrity.
-- **Secure Authentication**: Engineered a session-based auth flow using Passport.js and express-session, with persistent storage in PostgreSQL via Prisma.
-- **Optimized File Handling**: Integrated Cloudinary API for image uploads, reducing server-side processing overhead.
-- **Type-Safe Database Layer**: Utilized Prisma ORM with custom TypeScript interfaces to ensure type safety from the database to the UI.
-- **Relational Logic**: Leveraged composite unique constraints `@@unique([fileName, folderId])` to maintain data integrity across shared directories.
+- **Recursive Folder Architecture**: A self-referencing Prisma schema to support infinite folder nesting and featuring `onDelete: Cascade` to ensure recursive deletes.
+- **Authentication**: A session-based authentication flow using Passport.js and express-session, with persistent storage in PostgreSQL via Prisma.
+- **Cloud-Based File Handling**: Integrated Cloudinary API for image uploads, reducing server-side processing.
+- **Type-Safety**: Utilized Typescript with custom interfaces to ensure type safety from the database to the UI.
+- **Relational Logic**: Users, Files, and Folder modeled with relational schemas.
 
 ---
 
@@ -27,9 +27,9 @@ A high-performance file management system featuring nested directory structures,
 
 ## System Architecture
 
-The application is split into a decoupled monorepo for independent scaling.
+The application is split into a monorepo for clear separation of concerns.
 
-- **Server**: A RESTful API focused on controller-service patterns and middleware validation.
+- **Server**: A RESTful API focused on controller functions and middleware validation.
 - **Client**: A component-based SPA utilizing breadcrumb navigation and recursive rendering for folder trees.
 
 ---
