@@ -1,8 +1,10 @@
 import type { DraftFolder } from "../types/types";
 
+const apiUrl = import.meta.env.VITE_API_URL || '/api';
+
 export async function uploadFileFetch(formContents: FormData) {
   try {
-    const uploadFile = await fetch(`/api/file/upload`, {
+    const uploadFile = await fetch(`${apiUrl}/api/file/upload`, {
       method: "POST",
       body: formContents,
     });
@@ -18,7 +20,7 @@ export async function uploadFileFetch(formContents: FormData) {
 // for error handling:
 export async function getCurrentUserFetch() {
   try {
-    const response = await fetch("/api/user");
+    const response = await fetch(`${apiUrl}/api/user`);
 
     if (!response.ok) {
       const errorObj = await response.json();
@@ -36,7 +38,7 @@ export async function getCurrentUserFetch() {
 
 export async function logInFetch(data: { [k: string]: FormDataEntryValue }) {
   try {
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch(`${apiUrl}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +54,7 @@ export async function logInFetch(data: { [k: string]: FormDataEntryValue }) {
 
 export async function signUpFetch(data: { [k: string]: FormDataEntryValue }) {
   try {
-    const response = await fetch("/api/auth/signup", {
+    const response = await fetch(`${apiUrl}/api/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +70,7 @@ export async function signUpFetch(data: { [k: string]: FormDataEntryValue }) {
 
 export async function signOutFetch() {
   try {
-    const response = await fetch("/api/auth/signout");
+    const response = await fetch(`${apiUrl}/api/auth/signout`);
     return response;
   } catch (e) {
     console.error(e);
@@ -81,7 +83,7 @@ export async function signOutFetch() {
 // if response is 401
 export async function createFolderFetch(data: DraftFolder) {
   try {
-    const response = await fetch("/api/folder/", {
+    const response = await fetch(`${apiUrl}/api/folder/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +99,7 @@ export async function createFolderFetch(data: DraftFolder) {
 
 export async function getAllUserFoldersFetch(id: number) {
   try {
-    const response = await fetch(`/api/folder/${id}`);
+    const response = await fetch(`${apiUrl}/api/folder/${id}`);
     if (response.ok) {
       return await response.json();
     } else {
@@ -111,7 +113,7 @@ export async function getAllUserFoldersFetch(id: number) {
 
 export async function deleteFolderFetch(id: number) {
   try {
-    const response = await fetch(`/api/folder/${id}`, {
+    const response = await fetch(`${apiUrl}/api/folder/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -128,7 +130,7 @@ export async function deleteFolderFetch(id: number) {
 
 export async function deleteSingleFileFromDbAndCloudinaryFetch(fileId: number) {
   try {
-    const deleteFileResponse = await fetch(`/api/file/${fileId}`, {
+    const deleteFileResponse = await fetch(`${apiUrl}/api/file/${fileId}`, {
       method: "DELETE",
     });
     if (!deleteFileResponse.ok) {
@@ -142,7 +144,7 @@ export async function deleteSingleFileFromDbAndCloudinaryFetch(fileId: number) {
 
 export async function deleteManyFilesFetch(data: Array<{ fileURL: string }>) {
   try {
-    const deleteManyFilesResponse = await fetch(`/api/file/delete`, {
+    const deleteManyFilesResponse = await fetch(`${apiUrl}/api/file/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
