@@ -1,102 +1,98 @@
 # File Uploader
 
-A full-stack file management app built with React, Express, and PostgreSQL. It handles nested folders, secure user auth, and offloads storage to Cloudinary. This was built to practice using Prisma ORM within a modern TypeScript stack.
+A high-performance file management system featuring nested directory structures, secure cloud storage, and relational data integrity. Built with a modern TypeScript stack, this project demonstrates a deep dive into recursive data handling and scalable backend architecture.
 
 ---
 
-## Core Features
+## 🚀 Key Engineering Highlights
 
-- **Auth** — Full signup/login flow using session-based authentication.
-- **Organization** — Create nested folders with breadcrumb navigation.
-- **Cloud Storage** — Files are streamed to Cloudinary, keeping the local database lean.
-- **Type Safety** — End-to-end TypeScript with Prisma for database queries.
-- **Management** — Preview image details, track metadata, and perform bulk deletions.
+- **Recursive Folder Architecture** — Implemented a self-referencing PostgreSQL schema to support infinite folder nesting with `onDelete: Cascade` referential integrity.
+- **Secure Authentication** — Engineered a session-based auth flow using Passport.js and express-session, with persistent storage in PostgreSQL via Prisma.
+- **Optimized File Handling** — Integrated Cloudinary API for automated image transformations and CDN-based delivery, reducing server-side processing overhead.
+- **Type-Safe Database Layer** — Utilized Prisma ORM with custom TypeScript interfaces to ensure end-to-end type safety from the database to the UI.
+- **Relational Logic** — Leveraged composite unique constraints `@@unique([fileName, folderId])` to maintain data integrity across shared directories.
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 | Layer | Technologies |
 |---|---|
-| Frontend | React (Vite), TypeScript, Context API |
-| Backend | Node.js, Express, Prisma ORM |
-| Database | PostgreSQL |
+| Frontend | React, TypeScript, Vite, React Context API |
+| Backend | Node.js, Express, TypeScript, Passport.js |
+| Database | PostgreSQL, Prisma ORM |
 | Storage | Cloudinary API |
 
 ---
 
-## Getting Started
+## 🏗️ System Architecture
 
-### 1. Installation
+The application is split into a decoupled monorepo for independent scaling.
 
-Clone the repo and install dependencies for both the client and server:
+- **Server** — A RESTful API focused on controller-service patterns and middleware validation.
+- **Client** — A component-based SPA utilizing breadcrumb navigation and recursive rendering for folder trees.
 
+---
+
+## 📂 Database Schema
+
+```prisma
+model Folder {
+  id         Int      @id @default(autoincrement())
+  folderName String   @db.VarChar(25)
+  userId     Int
+  parentId   Int?     // Recursive parent reference
+  parent     Folder?  @relation("SubFolders", fields: [parentId], references: [id], onDelete: Cascade)
+  children   Folder[] @relation("SubFolders")
+  files      File[]
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  fileName   String   @db.VarChar(25)
+  fileURL    String
+  size       Int
+  folderId   Int
+
+  @@unique([fileName, folderId]) // Prevents duplicate names in the same directory
+}
+```
+
+---
+
+## 🛠️ Local Development
+
+### Prerequisites
+
+- Node.js v18+
+- PostgreSQL instance
+- Cloudinary API keys
+
+### Quick Start
+
+**1. Clone & Install:**
 ```bash
 git clone https://github.com/Mikael92002/file_uploader.git
-cd file_uploader
 
 cd client && npm install
 cd ../server && npm install
 ```
 
-### 2. Environment Setup
+**2. Environment Setup:**
 
-Create a `.env` file in the `server` directory:
+Create a `.env` in `/server` with your `DATABASE_URL`, `SESSION_SECRET`, and Cloudinary credentials.
 
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/file_uploader_db"
-PORT=3000
-SESSION_SECRET="your_secret_here"
-
-# Cloudinary
-CLOUDINARY_NAME=your_name
-CLOUDINARY_API_KEY=your_key
-CLOUDINARY_API_SECRET=your_secret
-```
-
-### 3. Database Initialization
-
-Run the following inside the `server` folder to sync your schema:
-
+**3. Initialize Database:**
 ```bash
 npx prisma generate
-npx prisma migrate dev
+npx prisma migrate deploy
 ```
 
----
-
-## Running the App
-
-You'll need two terminals open.
-
-**Terminal 1 — Backend:**
+**4. Run:**
 ```bash
-cd server
-npm run dev
+# Terminal 1 — Server
+cd server && npm run dev
+
+# Terminal 2 — Client
+cd client && npm run dev
 ```
-
-**Terminal 2 — Frontend:**
-```bash
-cd client
-npm run dev
-```
-
-The frontend will be at `http://localhost:5173` and automatically proxies API requests to the backend.
-
----
-
-## Database Schema
-
-The data model focuses on the relationship between users, their folders, and the files within them.
-
-- **User** — Owns multiple folders.
-- **Folder** — Supports a self-referencing relationship (parent/children) for nesting.
-- **File** — Linked to a folder and stores the Cloudinary URL and metadata.
-
----
-
-## Security Notes
-
-- **Passwords** — Hashed using `bcryptjs`.
-- **Sessions** — Uses `httpOnly` cookies to mitigate XSS risks.
-- **Uploads** — Validates MIME types and file extensions before sending to the cloud.
