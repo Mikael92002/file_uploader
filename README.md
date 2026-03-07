@@ -4,17 +4,17 @@ A high-performance file management system featuring nested directory structures,
 
 ---
 
-## 🚀 Key Engineering Highlights
+## Highlights
 
-- **Recursive Folder Architecture** — Implemented a self-referencing PostgreSQL schema to support infinite folder nesting with `onDelete: Cascade` referential integrity.
-- **Secure Authentication** — Engineered a session-based auth flow using Passport.js and express-session, with persistent storage in PostgreSQL via Prisma.
-- **Optimized File Handling** — Integrated Cloudinary API for automated image transformations and CDN-based delivery, reducing server-side processing overhead.
-- **Type-Safe Database Layer** — Utilized Prisma ORM with custom TypeScript interfaces to ensure end-to-end type safety from the database to the UI.
-- **Relational Logic** — Leveraged composite unique constraints `@@unique([fileName, folderId])` to maintain data integrity across shared directories.
+- **Recursive Folder Architecture**: Implemented a self-referencing PostgreSQL schema to support infinite folder nesting with `onDelete: Cascade` referential integrity.
+- **Secure Authentication**: Engineered a session-based auth flow using Passport.js and express-session, with persistent storage in PostgreSQL via Prisma.
+- **Optimized File Handling**: Integrated Cloudinary API for automated image transformations and CDN-based delivery, reducing server-side processing overhead.
+- **Type-Safe Database Layer**: Utilized Prisma ORM with custom TypeScript interfaces to ensure end-to-end type safety from the database to the UI.
+- **Relational Logic**: Leveraged composite unique constraints `@@unique([fileName, folderId])` to maintain data integrity across shared directories.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technologies |
 |---|---|
@@ -25,7 +25,7 @@ A high-performance file management system featuring nested directory structures,
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 The application is split into a decoupled monorepo for independent scaling.
 
@@ -34,7 +34,7 @@ The application is split into a decoupled monorepo for independent scaling.
 
 ---
 
-## 📂 Database Schema
+## Database Schema
 
 ```prisma
 model Folder {
@@ -60,7 +60,7 @@ model File {
 
 ---
 
-## 🛠️ Local Development
+## Local Development
 
 ### Prerequisites
 
