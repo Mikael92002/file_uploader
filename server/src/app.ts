@@ -15,10 +15,18 @@ import {
   healthRouter,
 } from "./routes";
 import cors from "cors";
+import { Pool } from "pg";
+import connectPgSimple from "connect-pg-simple";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
+
+const pgPool = new Pool({
+  connectionString,
+  ssl: { rejectUnauthorized: false },
+});
+const PgSession = connectPgSimple(expressSession);
 
 const app = express();
 
@@ -49,11 +57,11 @@ app.use(
       secure: process.env.NODE_ENV === "production",
     },
     secret: process.env.SECRET!,
-    resave: true,
-    saveUninitialized: true,
-    store: new PrismaSessionStore(prisma as any, {
-      checkPeriod: 2 * 60 * 1000, //ms
-      dbRecordIdIsSessionId: true,
+    resave: false,
+    saveUninitialized: false,
+    store: new PgSession({
+      pool: pgPool,
+      tableName: "Session",
     }),
   }),
 );
