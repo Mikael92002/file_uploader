@@ -68,7 +68,7 @@ model File {
 - PostgreSQL instance
 - Cloudinary API keys
 
-### Quick Start
+### Setup
 
 **1. Clone & Install:**
 ```bash
