@@ -1,4 +1,4 @@
-import { uploadFileFetch } from "../fetches/fetch";
+import { uploadFileFetch, validateFile } from "../fetches/fetch";
 import Modal from "react-modal";
 import styles from "../css modules/Modal.module.css";
 import { useState } from "react";
@@ -33,23 +33,39 @@ const FileUploadForm = ({ folderId }: FileForm) => {
   async function uploadForm(e: React.SubmitEvent) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    formData.set("fileName", String(formData.get("fileName"))!.trim());
+
+    const fileName = String(formData.get("fileName"))!.trim();
+
+    formData.set("fileName", fileName);
     formData.append("folderId", String(folderId));
 
     // in server: req.file = "file"
     setIsWaiting(true);
-    const response = await uploadFileFetch(formData);
-    const json = await response?.json();
-    setIsWaiting(false);
-    if (response?.ok) {
-      const newRoot = insertFile(rootFolder!, json.newFile, folderId) as Folder;
-      setRootFolder(newRoot);
-      closeModal();
-    } else if (response?.status === 400) {
-      setErrors(json.error[0].msg);
-    } else if (response?.status === 415) {
-      setErrors(json.message);
+    const fileValidationObject = {
+      fileName: fileName,
+      folderId: Number(folderId),
+    };
+    const fileValidationResponse = await validateFile(fileValidationObject);
+    if (fileValidationResponse?.ok) {
+      const response = await uploadFileFetch(formData);
+      const json = await response?.json();
+      if (response?.ok) {
+        const newRoot = insertFile(
+          rootFolder!,
+          json.newFile,
+          folderId,
+        ) as Folder;
+        setRootFolder(newRoot);
+        closeModal();
+      } else if (response?.status === 415) {
+        setErrors(json.message);
+      }
+    } else if (fileValidationResponse?.status === 401) {
+      const validationError = await fileValidationResponse?.json();
+      setErrors(validationError.message);
+      
     }
+    setIsWaiting(false);
   }
 
   Modal.setAppElement("#root");

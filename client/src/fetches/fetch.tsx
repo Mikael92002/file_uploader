@@ -172,3 +172,23 @@ export async function deleteManyFilesFetch(data: Array<{ fileURL: string }>) {
     console.error(e);
   }
 }
+
+export async function validateFile(fileAndFolder: {
+  fileName: string;
+  folderId: number;
+}) {
+  try {
+    const validationResponse = await fetch(`${apiUrl}/api/file/validate`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fileAndFolder),
+      credentials: "include",
+    });
+    return validationResponse;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}

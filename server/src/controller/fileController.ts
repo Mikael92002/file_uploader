@@ -3,66 +3,59 @@ import { NextFunction, Request, Response } from "express";
 import { createNewFile, deleteFile } from "../db/queries";
 import { CustomError } from "../Errors/CustomError";
 import { deleteFileFromCloudinary } from "../middleware/deleteMiddleware";
-import { body, validationResult, matchedData } from "express-validator";
 import { prisma } from "../lib/prisma";
 
-const validateFile = [
-  body("fileName").custom(async (value: string, { req }) => {
-    const folderId = Number(req.body.folderId);
-    console.log("This is the folder id: " + folderId);
-    const existingFileInFolder = await prisma.file.findUnique({
-      where: {
-        fileName_folderId: {
-          folderId: folderId,
-          fileName: value,
-        },
+export const validateFileController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const fileName = req.body.fileName;
+  const folderId = req.body.folderId;
+  const existingFileInFolder = await prisma.file.findUnique({
+    where: {
+      fileName_folderId: {
+        folderId: folderId,
+        fileName: fileName,
       },
-    });
-    if (existingFileInFolder) {
-      throw new Error("File already exists in this folder");
-    }
-  }),
-];
+    },
+  });
+  if (existingFileInFolder) {
+    next(new CustomError("File already exists in this folder", 401));
+  } else {
+    return res.status(200).json();
+  }
+};
 
-export const fileUploadSuccess = [
-  ...validateFile,
-  async (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.log("Yes there are errors");
-      res.status(400).json({ error: errors.array() });
-      return;
-    }
-    if (!req.user) {
-      return res.status(401).json({ error: "No user found from cookie" });
-    }
+export const fileUploadSuccess = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "No user found from cookie" });
+  }
 
-    // should not happen if front end validated with "required":
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-    const maxSize = 5 * 1024 * 1024;
-    const fileSize = req.file.size;
-    if (fileSize > maxSize) {
-      return next(new CustomError("File too large", 413));
-    }
-    try {
-      const fileURL = req.file.path;
-      const folderId = Number(req.body.folderId);
-      const fileName = req.body.fileName;
-      // upload file to db:
-      const newFile = await createNewFile(
-        fileName,
-        fileURL,
-        fileSize,
-        folderId,
-      );
-      res.status(200).json({ newFile });
-    } catch (err) {
-      next(err);
-    }
-  },
-];
+  // should not happen if front end validated with "required":
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+  const maxSize = 5 * 1024 * 1024;
+  const fileSize = req.file.size;
+  if (fileSize > maxSize) {
+    return next(new CustomError("File too large", 413));
+  }
+  try {
+    const fileURL = req.file.path;
+    const folderId = Number(req.body.folderId);
+    const fileName = req.body.fileName;
+    // upload file to db:
+    const newFile = await createNewFile(fileName, fileURL, fileSize, folderId);
+    res.status(200).json({ newFile });
+  } catch (err) {
+    next(err);
+  }
+};
 
 function urlExtractor(url: string) {
   if (!url) {

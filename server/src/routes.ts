@@ -13,6 +13,7 @@ import {
   postNewFolder,
 } from "./controller/folderController";
 import { getHealth } from "./controller/healthController";
+import { validateFileController } from "./controller/fileController";
 
 export const userRoute = Router();
 export const fileRouter = Router();
@@ -29,10 +30,11 @@ userRoute.get("/", getCurrentUserFromCookie);
 fileRouter.post(
   "/upload",
   upload("fileFolder").single("file"),
-  ...fileUploadSuccess,
+  fileUploadSuccess,
 );
 fileRouter.delete("/delete", deleteManyFiles);
 fileRouter.delete("/:fileId", deleteFileFromCloudinaryAndDb);
+fileRouter.post("/validate", validateFileController)
 
 // formRoute:
 authRouter.post("/login", logInPost);
