@@ -25,7 +25,8 @@ const FolderIterator = () => {
         await deleteManyFilesFetch(fileArr);
         const deletedFolder = await deleteFolderFetch(folder.id);
         if (deletedFolder) {
-          setRootFolder(recursiveFolderDelete(folder.id, rootFolder!));
+          const currFolder = recursiveFolderDelete(folder.id, rootFolder!);
+          setRootFolder(currFolder);
         }
       } catch (e) {
         console.error("Error deleting folder: ", e);

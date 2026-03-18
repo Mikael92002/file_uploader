@@ -186,11 +186,12 @@ export function recursiveFolderDelete(id: number, folder: Folder) {
     const child = recursiveFolderDelete(id, folder.children[i]);
     if (child) {
       const newChildArr = folder.children.filter((childObj) => {
-        if (childObj !== folder.children[i]) {
+        if (childObj.id !== id) {
           return childObj;
         }
       });
-      return { ...folder, children: newChildArr };
+      folder.children = [...newChildArr];
+      return {...folder};
     }
   }
   return null;
