@@ -11,7 +11,7 @@ export const getCurrentUserFromCookie = async (
       user: { id: req.user.id, username: req.user.username },
     });
   } else {
-    next(new CustomError("User not found from current cookie", 401));
+    res.json({ user: null });
   }
 };
 

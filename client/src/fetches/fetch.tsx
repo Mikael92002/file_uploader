@@ -26,9 +26,7 @@ export async function getCurrentUserFetch() {
     });
 
     if (!response.ok) {
-      const errorObj = await response.json();
-      console.error(errorObj.message);
-      return null;
+      throw new Error(`${response.status}`);
     }
 
     const userObj = await response.json();

@@ -16,6 +16,7 @@ const validateUser = [
       "Username can only contain alphabets, numbers, or special symbols and must be less than 20 characters",
     )
     .custom(async (value) => {
+      try{
       const user = await prisma.user.findUnique({
         where: {
           username: value,
@@ -23,6 +24,8 @@ const validateUser = [
       });
       if (user) {
         throw new Error("Username is already taken"); // or next(new Error("message here"))
+      }}catch(e){
+        throw new Error("Network error");
       }
     }),
   body("password"),
