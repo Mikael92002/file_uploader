@@ -9,6 +9,34 @@ export const logInPost = passport.authenticate("local", {
   failureRedirect: "/failure",
 });
 
+const checkDatabaseHealth = async () => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+
+    console.log("Database connection is healthy.");
+    return true;
+  } catch (e: any) {
+    console.error("Database connection failed:", e.message);
+    return false;
+  }
+};
+
+const databaseHealthPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const health = await checkDatabaseHealth();
+  if (!health) {
+    return res
+      .status(400)
+      .json({
+        errors: [{msg: "Database server is down, please try again later"}] },
+      );
+  }
+  next();
+};
+
 const validateUser = [
   body("username")
     .matches(/^[^\s]{1,20}$/)
@@ -16,16 +44,17 @@ const validateUser = [
       "Username can only contain alphabets, numbers, or special symbols and must be less than 20 characters",
     )
     .custom(async (value) => {
-      try{
-      const user = await prisma.user.findUnique({
-        where: {
-          username: value,
-        },
-      });
-      if (user) {
-        throw new Error("Username is already taken"); // or next(new Error("message here"))
-      }}catch(e){
-        throw new Error("Network error");
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            username: value,
+          },
+        });
+        if (user) {
+          throw new Error("Username is already taken"); // or next(new Error("message here"))
+        }
+      } catch (e) {
+        throw new Error("Server is not responding, please try again later");
       }
     }),
   body("password"),
@@ -48,11 +77,12 @@ const validateUser = [
 ];
 
 export const signUpPost = [
+  databaseHealthPost,
   validateUser,
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({errors: errors.array() });
+      res.status(400).json({ errors: errors.array() });
       return;
     }
     try {
@@ -72,7 +102,7 @@ export const signUpPost = [
           folders: true,
         },
       });
-      res.json({errors: [] });
+      res.json({ errors: [] });
     } catch (e) {
       return next(e);
     }

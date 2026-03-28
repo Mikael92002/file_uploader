@@ -39,6 +39,9 @@ const LogIn = () => {
     } else if (logInResponse?.url.endsWith("/failure")) {
       setErrorMessage("Incorrect username or password");
     }
+    else{
+      setErrorMessage("Database server is down, please try again later")
+    }
   }
 
   if (currentUser) {

@@ -41,6 +41,7 @@ const SignUp = () => {
       navigate("/home");
     } else if (signUpResponse?.status === 400) {
       const signUpObj = await signUpResponse.json();
+      console.log(signUpObj);
       setErrorsArray(signUpObj.errors);
     }
   }
